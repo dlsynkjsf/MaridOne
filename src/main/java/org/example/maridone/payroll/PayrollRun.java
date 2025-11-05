@@ -1,12 +1,67 @@
 package org.example.maridone.payroll;
 
 import jakarta.persistence.*;
+import org.example.maridone.enums.PayrollStatus;
+import org.example.maridone.enums.RunType;
+
+import java.time.LocalDate;
 
 @Entity
 public class PayrollRun {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long runId;
+    @Column(name = "pay_id")
+    private long payId;
 
+    @Column(name = "period_start")
+    private LocalDate periodStart;
+
+    @Column(name = "period_end")
+    private LocalDate periodEnd;
+
+    @Column(name = "payroll_status")
+    @Enumerated(EnumType.STRING)
+    private PayrollStatus payrollStatus;
+
+    @Column(name = "run_type")
+    @Enumerated(EnumType.STRING)
+    private RunType runType;
+
+
+    public long getPayId() {
+        return payId;
+    }
+
+    public LocalDate getPeriodStart() {
+        return periodStart;
+    }
+
+    public void setPeriodStart(LocalDate periodStart) {
+        this.periodStart = periodStart;
+    }
+
+    public PayrollStatus getPayrollStatus() {
+        return payrollStatus;
+    }
+
+    public void setPayrollStatus(PayrollStatus payrollStatus) {
+        this.payrollStatus = payrollStatus;
+    }
+
+    public LocalDate getPeriodEnd() {
+        return periodEnd;
+    }
+
+    public void setPeriodEnd(LocalDate periodEnd) {
+        this.periodEnd = periodEnd;
+    }
+
+    public RunType getRunType() {
+        return runType;
+    }
+
+    public void setRunType(RunType runType) {
+        this.runType = runType;
+    }
 }

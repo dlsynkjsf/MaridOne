@@ -97,6 +97,14 @@ public class Employee {
         this.birthDate = birthDate;
     }
 
+    public EmploymentStatus getEmploymentStatus() {
+        return employmentStatus;
+    }
+
+    public void setEmploymentStatus(EmploymentStatus employmentStatus) {
+        this.employmentStatus = employmentStatus;
+    }
+
     public String getEmail() {
         return email;
     }

@@ -7,5 +7,6 @@ import jakarta.persistence.*;
 public class PayrollItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "item_id")
     private long itemId;
 }
