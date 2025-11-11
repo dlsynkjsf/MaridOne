@@ -17,7 +17,7 @@ public class DeductionsLine {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private PayrollItem itemId;
+    private PayrollItem payrollItem;
 
     @Column(name = "deduction_type")
     @Enumerated(EnumType.STRING)
@@ -31,12 +31,12 @@ public class DeductionsLine {
         return deductionsId;
     }
 
-    public PayrollItem getItemId() {
-        return itemId;
+    public PayrollItem getPayrollItem() {
+        return payrollItem;
     }
 
-    public void setItemId(PayrollItem itemId) {
-        this.itemId = itemId;
+    public void setPayrollItem(PayrollItem payrollItem) {
+        this.payrollItem = payrollItem;
     }
 
     public DeductionType getDeductionType() {

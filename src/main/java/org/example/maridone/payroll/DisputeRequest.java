@@ -29,7 +29,7 @@ public class DisputeRequest {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private PayrollItem itemId;
+    private PayrollItem payrollItem;
 
     public Long getDisputeId() {
         return disputeId;
@@ -67,11 +67,11 @@ public class DisputeRequest {
         this.updatedAt = updatedAt;
     }
 
-    public PayrollItem getItemId() {
-        return itemId;
+    public PayrollItem getPayrollItem() {
+        return payrollItem;
     }
 
-    public void setItemId(PayrollItem itemId) {
-        this.itemId = itemId;
+    public void setPayrollItem(PayrollItem payrollItem) {
+        this.payrollItem = payrollItem;
     }
 }

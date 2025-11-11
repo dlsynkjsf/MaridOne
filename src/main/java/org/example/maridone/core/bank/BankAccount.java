@@ -1,6 +1,7 @@
-package org.example.maridone.core;
+package org.example.maridone.core.bank;
 
 import jakarta.persistence.*;
+import org.example.maridone.core.employee.Employee;
 
 @Entity
 @Table(name = "bank_account")

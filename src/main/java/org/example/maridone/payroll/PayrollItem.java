@@ -2,7 +2,7 @@ package org.example.maridone.payroll;
 
 
 import jakarta.persistence.*;
-import org.example.maridone.core.Employee;
+import org.example.maridone.core.employee.Employee;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,13 +29,13 @@ public class PayrollItem {
     @Column(name = "net_pay")
     private BigDecimal netPay;
 
-    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
     private List<DeductionsLine> deductions;
 
-    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
     private List<EarningsLine> earnings;
 
-    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
     private List<DisputeRequest> disputes;
 
     public long getItemId() {
@@ -88,5 +88,13 @@ public class PayrollItem {
 
     public void setEarnings(List<EarningsLine> earnings) {
         this.earnings = earnings;
+    }
+
+    public List<DisputeRequest> getDisputes() {
+        return disputes;
+    }
+
+    public void setDisputes(List<DisputeRequest> disputes) {
+        this.disputes = disputes;
     }
 }

@@ -1,7 +1,7 @@
 package org.example.maridone.leave;
 
 import jakarta.persistence.*;
-import org.example.maridone.core.Employee;
+import org.example.maridone.core.employee.Employee;
 
 import java.time.LocalDate;
 

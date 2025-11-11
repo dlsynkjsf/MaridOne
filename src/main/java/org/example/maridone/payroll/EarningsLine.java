@@ -16,7 +16,7 @@ public class EarningsLine {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private PayrollItem itemId;
+    private PayrollItem payrollItem;
 
     @Column(name = "hours")
     private double hours;
@@ -31,12 +31,12 @@ public class EarningsLine {
         return earningsId;
     }
 
-    public PayrollItem getItemId() {
-        return itemId;
+    public PayrollItem getPayrollItem() {
+        return payrollItem;
     }
 
-    public void setItemId(PayrollItem itemId) {
-        this.itemId = itemId;
+    public void setPayrollItem(PayrollItem payrollItem) {
+        this.payrollItem = payrollItem;
     }
 
     public double getHours() {

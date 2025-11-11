@@ -1,13 +1,16 @@
-package org.example.maridone.core;
+package org.example.maridone.core.employee;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
 import org.example.maridone.embeddable.Address;
+import org.example.maridone.leave.LeaveBalance;
+import org.example.maridone.leave.LeaveRequest;
 import org.example.maridone.notification.Notification;
 
 import java.time.LocalDate;
@@ -62,8 +65,14 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<BankAccount> bankAccounts;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Notification> notifications;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<LeaveRequest> requests;
+
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private LeaveBalance leaveBalance;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -155,5 +164,21 @@ public class Employee {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public List<LeaveRequest> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<LeaveRequest> requests) {
+        this.requests = requests;
+    }
+
+    public LeaveBalance getLeaveBalance() {
+        return leaveBalance;
+    }
+
+    public void setLeaveBalance(LeaveBalance leaveBalance) {
+        this.leaveBalance = leaveBalance;
     }
 }

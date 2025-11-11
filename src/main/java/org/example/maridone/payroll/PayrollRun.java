@@ -3,6 +3,7 @@ package org.example.maridone.payroll;
 import jakarta.persistence.*;
 import org.example.maridone.enums.PayrollStatus;
 import org.example.maridone.enums.RunType;
+import java.util.List;
 
 import java.time.LocalDate;
 
@@ -29,6 +30,8 @@ public class PayrollRun {
     @Enumerated(EnumType.STRING)
     private RunType runType;
 
+    @OneToMany(mappedBy = "payrollRun")
+    private List<PayrollItem> items;
 
     public Long getPayId() {
         return payId;
@@ -64,5 +67,13 @@ public class PayrollRun {
 
     public void setRunType(RunType runType) {
         this.runType = runType;
+    }
+
+    public List<PayrollItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<PayrollItem> items) {
+        this.items = items;
     }
 }

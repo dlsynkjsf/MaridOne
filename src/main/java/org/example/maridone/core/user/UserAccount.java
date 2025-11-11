@@ -1,6 +1,7 @@
-package org.example.maridone.core;
+package org.example.maridone.core.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.AccountStatus;
 
 @Entity
@@ -19,7 +20,7 @@ public class UserAccount {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id",nullable = false)
     private Employee employee;
 
