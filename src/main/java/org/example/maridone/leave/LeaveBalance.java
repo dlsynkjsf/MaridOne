@@ -13,7 +13,7 @@ public class LeaveBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "balance_id")
-    private long balanceId;
+    private Long balanceId;
 
     @OneToOne
     @JoinColumn(name = "emp_id")
@@ -23,7 +23,7 @@ public class LeaveBalance {
     private BigDecimal balanceRemaining;
 
 
-    public long getBalanceId() {
+    public Long getBalanceId() {
         return balanceId;
     }
 
