@@ -7,6 +7,7 @@ import org.example.maridone.core.Employee;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "leave_balance")
 public class LeaveBalance {
 
     @Id

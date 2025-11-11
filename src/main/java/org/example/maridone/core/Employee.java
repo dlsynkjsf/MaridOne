@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
 import org.example.maridone.embeddable.Address;
+import org.example.maridone.notification.Notification;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,6 +61,9 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<BankAccount> bankAccounts;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Notification> notifications;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -143,5 +147,13 @@ public class Employee {
 
     public void setBankAccounts(List<BankAccount> bankAccounts) {
         this.bankAccounts = bankAccounts;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

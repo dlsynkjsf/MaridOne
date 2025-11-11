@@ -6,12 +6,13 @@ import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "earnings_line")
 public class EarningsLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "earnings_id")
-    private long earningsId;
+    private Long earningsId;
 
     @ManyToOne
     @JoinColumn(name = "item_id")

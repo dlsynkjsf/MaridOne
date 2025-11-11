@@ -6,6 +6,7 @@ import org.example.maridone.core.Employee;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "leave_request")
 public class LeaveRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

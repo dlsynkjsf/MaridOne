@@ -7,12 +7,13 @@ import org.example.maridone.enums.RunType;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "payroll_run")
 public class PayrollRun {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "pay_id")
-    private long payId;
+    private Long payId;
 
     @Column(name = "period_start")
     private LocalDate periodStart;
@@ -29,7 +30,7 @@ public class PayrollRun {
     private RunType runType;
 
 
-    public long getPayId() {
+    public Long getPayId() {
         return payId;
     }
 

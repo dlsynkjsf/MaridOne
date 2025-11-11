@@ -6,12 +6,14 @@ import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import java.math.BigDecimal;
 
 
+@Entity
+@Table(name = "deductions_line")
 public class DeductionsLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "deductions_id")
-    private long deductionsId;
+    private Long deductionsId;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -25,7 +27,7 @@ public class DeductionsLine {
     private BigDecimal amount;
 
 
-    public long getDeductionsId() {
+    public Long getDeductionsId() {
         return deductionsId;
     }
 

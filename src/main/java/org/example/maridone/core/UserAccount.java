@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import org.example.maridone.enums.AccountStatus;
 
 @Entity
+@Table(name = "user_account")
 public class UserAccount {
 
     @Id

@@ -9,7 +9,7 @@ public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "bank_id")
-    private long bankId;
+    private Long bankId;
 
     @ManyToOne
     @JoinColumn(name = "emp_id", nullable = false)
@@ -21,7 +21,7 @@ public class BankAccount {
     @Column(name = "bank_name", nullable = false)
     private String bankName;
 
-    public long getBankId() {
+    public Long getBankId() {
         return bankId;
     }
 
