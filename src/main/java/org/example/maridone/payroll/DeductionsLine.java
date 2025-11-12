@@ -12,18 +12,18 @@ public class DeductionsLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "deductions_id")
+    @Column(name = "deductions_id", nullable = false)
     private Long deductionsId;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private PayrollItem payrollItem;
 
-    @Column(name = "deduction_type")
+    @Column(name = "deduction_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private DeductionType deductionType;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
 

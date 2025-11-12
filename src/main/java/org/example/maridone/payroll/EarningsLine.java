@@ -11,20 +11,20 @@ public class EarningsLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "earnings_id")
+    @Column(name = "earnings_id", nullable = false)
     private Long earningsId;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private PayrollItem payrollItem;
 
-    @Column(name = "hours")
+    @Column(name = "hours", nullable = false)
     private double hours;
 
-    @Column(name = "rate")
+    @Column(name = "rate", nullable = false)
     private double rate;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
     public long getEarningsId() {

@@ -10,26 +10,26 @@ import java.time.LocalDate;
 public class LeaveRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "request_id")
+    @Column(name = "request_id", nullable = false)
     private Long requestId;
 
     @ManyToOne
     @JoinColumn(name = "emp_id")
     private Employee employee;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "approver")
+    @Column(name = "approver", nullable = false)
     private String approver;
 
-    @Column(name = "request_status")
+    @Column(name = "request_status", nullable = false)
     private String requestStatus;
 
-    @Column(name = "reason", nullable = true)
+    @Column(name = "reason", nullable = false)
     private String reason;
 
     public Long getRequestId() {

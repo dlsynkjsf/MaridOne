@@ -13,20 +13,20 @@ public class PayrollRun {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "pay_id")
+    @Column(name = "pay_id", nullable = false)
     private Long payId;
 
-    @Column(name = "period_start")
+    @Column(name = "period_start", nullable = false)
     private LocalDate periodStart;
 
-    @Column(name = "period_end")
+    @Column(name = "period_end", nullable = false)
     private LocalDate periodEnd;
 
-    @Column(name = "payroll_status")
+    @Column(name = "payroll_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PayrollStatus payrollStatus;
 
-    @Column(name = "run_type")
+    @Column(name = "run_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private RunType runType;
 

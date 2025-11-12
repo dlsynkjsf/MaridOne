@@ -11,24 +11,24 @@ public class DisputeRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "dispute_id")
+    @Column(name = "dispute_id", nullable = false)
     private Long disputeId;
 
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private DisputeStatus status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private PayrollItem payrollItem;
 
     public Long getDisputeId() {

@@ -11,21 +11,12 @@ import java.math.BigDecimal;
 public class LeaveBalance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "balance_id")
-    private Long balanceId;
-
     @OneToOne
-    @JoinColumn(name = "emp_id")
+    @JoinColumn(name = "emp_id", nullable = false)
     private Employee employee;
 
-    @Column(name ="balance_remaining")
+    @Column(name ="balance_remaining", nullable = false)
     private BigDecimal balanceRemaining;
-
-
-    public Long getBalanceId() {
-        return balanceId;
-    }
 
     public Employee getEmployee() {
         return employee;

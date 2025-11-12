@@ -9,7 +9,7 @@ public class BankAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bank_id")
+    @Column(name = "bank_id", nullable = false)
     private Long bankId;
 
     @ManyToOne

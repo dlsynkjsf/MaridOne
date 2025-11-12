@@ -12,7 +12,7 @@ import java.util.List;
 public class PayrollItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "item_id")
+    @Column(name = "item_id", nullable = false)
     private Long itemId;
 
     @ManyToOne
@@ -23,10 +23,10 @@ public class PayrollItem {
     @JoinColumn(name = "pay_id", nullable = false)
     private PayrollRun payrollRun;
 
-    @Column(name = "gross_pay")
+    @Column(name = "gross_pay", nullable = false)
     private BigDecimal grossPay;
 
-    @Column(name = "net_pay")
+    @Column(name = "net_pay", nullable = false)
     private BigDecimal netPay;
 
     @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)

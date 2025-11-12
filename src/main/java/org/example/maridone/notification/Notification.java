@@ -11,20 +11,20 @@ import java.time.LocalDateTime;
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "notification_id")
+    @Column(name = "notification_id", nullable = false)
     private Long notificationId;
 
-    @Column(name = "message")
+    @Column(name = "message", nullable = false)
     private String message;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "read_status")
+    @Column(name = "read_status", nullable = false)
     private boolean readStatus;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public Long getNotificationId() {

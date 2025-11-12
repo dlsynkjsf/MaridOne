@@ -43,16 +43,16 @@ public class Employee {
     @Column(name ="birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
     @NotBlank
-    @Column(name = "email", unique = true, nullable = false, length = 254)
+    @Column(name = "email", nullable = false, length = 254)
     @Email
     private String email;
 
-    @Column(name = "phone_number", unique = true, nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "position", nullable = false)
