@@ -6,12 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import org.example.maridone.core.bank.BankAccount;
+import org.example.maridone.core.user.UserAccount;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
 import org.example.maridone.embeddable.Address;
 import org.example.maridone.leave.LeaveBalance;
 import org.example.maridone.leave.LeaveRequest;
 import org.example.maridone.notification.Notification;
+import org.example.maridone.payroll.PayrollItem;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -68,11 +70,17 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Notification> notifications;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<LeaveRequest> requests;
+
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private List<PayrollItem> payrollItems;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private LeaveBalance leaveBalance;
+
+    @OneToOne(mappedBy = "employee")
+    private UserAccount userAccount;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -174,11 +182,27 @@ public class Employee {
         this.requests = requests;
     }
 
+    public List<PayrollItem> getPayrollItems() {
+        return payrollItems;
+    }
+
+    public void setPayrollItems(List<PayrollItem> payrollItems) {
+        this.payrollItems = payrollItems;
+    }
+
     public LeaveBalance getLeaveBalance() {
         return leaveBalance;
     }
 
     public void setLeaveBalance(LeaveBalance leaveBalance) {
         this.leaveBalance = leaveBalance;
+    }
+
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 }
