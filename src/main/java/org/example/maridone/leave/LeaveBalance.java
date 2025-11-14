@@ -18,12 +18,17 @@ public class LeaveBalance {
     @Column(name ="balance_remaining", nullable = false)
     private BigDecimal balanceRemaining;
 
-    public Employee getEmployee() {
-        return employee;
+    public LeaveBalance() {
+
     }
 
-    public void setEmployee(Employee employee) {
+    public LeaveBalance(Employee employee, BigDecimal balanceRemaining) {
         this.employee = employee;
+        this.balanceRemaining = balanceRemaining;
+    }
+
+    public Employee getEmployee() {
+        return employee;
     }
 
     public BigDecimal getBalanceRemaining() {

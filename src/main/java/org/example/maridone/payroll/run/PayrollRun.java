@@ -1,8 +1,10 @@
-package org.example.maridone.payroll;
+package org.example.maridone.payroll.run;
 
 import jakarta.persistence.*;
 import org.example.maridone.enums.PayrollStatus;
 import org.example.maridone.enums.RunType;
+import org.example.maridone.payroll.PayrollItem;
+
 import java.util.List;
 
 import java.time.LocalDate;

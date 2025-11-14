@@ -3,6 +3,7 @@ package org.example.maridone.payroll;
 
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
+import org.example.maridone.payroll.run.PayrollRun;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -79,7 +79,7 @@ public class Employee {
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private LeaveBalance leaveBalance;
 
-    @OneToOne(mappedBy = "employee")
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private UserAccount userAccount;
 
     public Long getEmployeeId() {

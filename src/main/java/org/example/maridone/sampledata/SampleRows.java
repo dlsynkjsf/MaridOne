@@ -12,7 +12,9 @@ import org.example.maridone.notification.Notification;
 import org.example.maridone.payroll.DeductionsLine;
 import org.example.maridone.payroll.EarningsLine;
 import org.example.maridone.payroll.PayrollItem;
-import org.example.maridone.payroll.PayrollRun;
+import org.example.maridone.payroll.run.PayrollRun;
+import org.example.maridone.payroll.run.PayrollRunRepository;
+import org.example.maridone.payroll.run.PayrollRunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,9 @@ public class SampleRows {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    PayrollRunRepository payrollRunRepository;
+
     @PostConstruct
     public void init() {
         sampleData();
@@ -46,6 +51,7 @@ public class SampleRows {
         payrollRun.setRunType(RunType.REGULAR);
         payrollRun.setPeriodStart(LocalDate.now().minusDays(14));
         payrollRun.setPeriodEnd(LocalDate.now());
+        payrollRunRepository.save(payrollRun);
 
         for (int i = 0; i < 10; i++) {
             Employee emp = new Employee();
@@ -102,6 +108,8 @@ public class SampleRows {
 
             emp.setAddress(address);
 
+
+
             List<BankAccount> bankAccounts = createBankAccounts(emp, i);
             emp.setBankAccounts(bankAccounts);
 
@@ -112,7 +120,7 @@ public class SampleRows {
             userAccount.setUsername("userName" + i);
             emp.setUserAccount(userAccount);
 
-            PayrollItem item = createPayrollItem(emp, i);
+            PayrollItem item = createPayrollItem(emp, i, payrollRun);
             items.add(item);
             emp.setPayrollItems(new ArrayList<PayrollItem>());
             emp.getPayrollItems().add(item);
@@ -126,10 +134,10 @@ public class SampleRows {
             LeaveBalance leaveBalance = createBalance(emp, i);
             emp.setLeaveBalance(leaveBalance);
 
-            employees.add(emp);
+            employeeRepository.save(emp);
         }
-        employeeRepository.saveAll(employees);
 
+        payrollRun.setItems(items);
     }
 
     public static List<BankAccount> createBankAccounts(Employee emp, int i) {
@@ -189,14 +197,21 @@ public class SampleRows {
     }
 
     public static LeaveBalance createBalance(Employee emp, int i) {
-        LeaveBalance leaveBalance = new LeaveBalance();
-        leaveBalance.setBalanceRemaining(BigDecimal.valueOf(5.22));
-
-        return leaveBalance;
+        return new LeaveBalance(emp, BigDecimal.valueOf(5.22));
     }
 
-    public static PayrollItem createPayrollItem(Employee emp, int i) {
+    public static PayrollItem createPayrollItem(Employee emp, int i, PayrollRun payrollRun) {
         PayrollItem payrollItem = new PayrollItem();
+
+        for (int j = 0; j < 5; j++) {
+            payrollItem.setEmployee(emp);
+            payrollItem.setPayrollRun(payrollRun);
+            payrollItem.setGrossPay(BigDecimal.valueOf(5000));
+            payrollItem.setNetPay(BigDecimal.valueOf(5000));
+            payrollItem.setDeductions(new ArrayList<>());
+            payrollItem.setEarnings(new ArrayList<>());
+            payrollItem.setDisputes(new ArrayList<>());
+        }
 
         return payrollItem;
     }
