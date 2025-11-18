@@ -14,7 +14,6 @@ import org.example.maridone.payroll.EarningsLine;
 import org.example.maridone.payroll.PayrollItem;
 import org.example.maridone.payroll.run.PayrollRun;
 import org.example.maridone.payroll.run.PayrollRunRepository;
-import org.example.maridone.payroll.run.PayrollRunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

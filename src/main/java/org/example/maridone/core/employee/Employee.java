@@ -26,7 +26,6 @@ public class Employee {
     @Column(name = "emp_id", unique = true, nullable = false)
     private Long employeeId;
 
-
     @NotBlank
     @Column(name="first_name", nullable = false, length = 30)
     @Size(max = 30)
