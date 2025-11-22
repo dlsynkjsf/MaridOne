@@ -19,5 +19,4 @@ public interface EmployeeMapper {
 
     Employee employeeRequestToEmployee(EmployeeRequest employeeRequest);
 
-
 }

@@ -1,7 +1,7 @@
 package org.example.maridone.payroll;
 
 import jakarta.persistence.*;
-import org.example.maridone.enums.DisputeStatus;
+import org.example.maridone.enums.Status;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class DisputeRequest {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private DisputeStatus status;
+    private Status status;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -43,11 +43,11 @@ public class DisputeRequest {
         this.reason = reason;
     }
 
-    public DisputeStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(DisputeStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

@@ -2,8 +2,10 @@ package org.example.maridone.payroll;
 
 import jakarta.persistence.*;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
+import org.hibernate.sql.ast.tree.expression.Over;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "earnings_line")
@@ -17,6 +19,10 @@ public class EarningsLine {
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private PayrollItem payrollItem;
+
+    @ManyToOne
+    @JoinColumn(name = "overtime_id", nullable = true)
+    private OvertimeRequest overtimeRequest;
 
     @Column(name = "hours", nullable = false)
     private double hours;

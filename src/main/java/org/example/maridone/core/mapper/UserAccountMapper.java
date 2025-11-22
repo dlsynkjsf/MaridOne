@@ -1,4 +1,13 @@
 package org.example.maridone.core.mapper;
 
-public class UserAccountMapper {
+import org.example.maridone.core.dto.UserAccountDto;
+import org.example.maridone.core.user.UserAccount;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface UserAccountMapper {
+
+    UserAccountDto userAccounttoUserAccountDto(UserAccount userAccount);
+
+    UserAccount userAccountDtoToUserAccount(UserAccountDto userAccountDto);
 }

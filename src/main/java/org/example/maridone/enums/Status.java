@@ -1,6 +1,6 @@
 package org.example.maridone.enums;
 
-public enum DisputeStatus {
+public enum Status {
     PENDING,
     APPROVED,
     REJECTED

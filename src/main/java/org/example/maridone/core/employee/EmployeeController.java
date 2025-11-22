@@ -1,13 +1,21 @@
 package org.example.maridone.core.employee;
 
+import org.example.maridone.core.dto.BankAccountDto;
 import org.example.maridone.core.dto.EmployeeRequest;
 import org.example.maridone.core.dto.EmployeeResponse;
+import org.example.maridone.core.dto.UserAccountDto;
+import org.example.maridone.embeddable.Address;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
+import org.example.maridone.leave.LeaveRequest;
+import org.example.maridone.notification.Notification;
+import org.example.maridone.payroll.PayrollItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -68,14 +76,64 @@ public class EmployeeController {
         return employeeService.findByPosition(position);
     }
 
+//    @PatchMapping("/{id}/update/status")
+//    public EmployeeResponse updateStatus(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
+//
+//    }
+//
+//    @PatchMapping("/{id}/update/position")
+//    public EmployeeResponse updatePosition(@PathVariable Long id, @RequestBody Position position) {
+//
+//    }
+
+
 
 
 
 
     /*
         FOR EMPLOYEE ROLE
+        make sure only the specific employee can access their id
      */
 
-
+//    @GetMapping("/{id}/bank-accounts")
+//    public BankAccountDto getBankAccounts(@PathVariable Long id) {
+//
+//    }
+//
+//    @PostMapping("/{id}/bank-accounts")
+//    public BankAccountDto createBankAccount(@PathVariable Long id, BankAccountDto bankDetails) {
+//
+//    }
+//
+//    @GetMapping("/{id}/notifications")
+//    public List<Notification> getAllNotifications(@PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping("/{id}/leave-requests")
+//    public List<LeaveRequest> getAllLeaveRequests(@PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping("{id}/leave-balance")
+//    public BigDecimal getLeaveBalance(@PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping("/{id}/payroll-items")
+//    public List<PayrollItem> getAllPayrollItems(@PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping("/{id}/user-account")
+//    public UserAccountDto getUserAccount(@PathVariable Long id) {
+//
+//    }
+//
+//    @PatchMapping("/{id}/update/address")
+//    public EmployeeResponse updateAddress(@PathVariable Long id, Address address) {
+//
+//    }
 
 }
