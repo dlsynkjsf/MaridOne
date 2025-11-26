@@ -6,6 +6,7 @@ import org.example.maridone.enums.EarningsType;
 import org.example.maridone.enums.Status;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +32,7 @@ public class OvertimeRequest {
     private Status requestStatus;
 
     @Column(name = "request_at", nullable = false)
-    private LocalDateTime requestAt;
+    private Instant requestAt;
 
     @Column(name = "work_date", nullable = false)
     private LocalDate workDate;
@@ -54,7 +55,7 @@ public class OvertimeRequest {
     private String approver;
 
     @Column(name = "approved_at")
-    private LocalDateTime approvedAt;
+    private Instant approvedAt;
 
     public Long getOvertimeId() {
         return overtimeId;
@@ -82,14 +83,6 @@ public class OvertimeRequest {
 
     public void setRequestStatus(Status requestStatus) {
         this.requestStatus = requestStatus;
-    }
-
-    public LocalDateTime getRequestAt() {
-        return requestAt;
-    }
-
-    public void setRequestAt(LocalDateTime requestAt) {
-        this.requestAt = requestAt;
     }
 
     public LocalDate getWorkDate() {
@@ -148,11 +141,19 @@ public class OvertimeRequest {
         this.approver = approver;
     }
 
-    public LocalDateTime getApprovedAt() {
+    public Instant getRequestAt() {
+        return requestAt;
+    }
+
+    public void setRequestAt(Instant requestAt) {
+        this.requestAt = requestAt;
+    }
+
+    public Instant getApprovedAt() {
         return approvedAt;
     }
 
-    public void setApprovedAt(LocalDateTime approvedAt) {
+    public void setApprovedAt(Instant approvedAt) {
         this.approvedAt = approvedAt;
     }
 }

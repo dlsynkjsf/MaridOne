@@ -54,86 +54,62 @@ public class EmployeeController {
     // ENDPOINT: api/employees/id
     // id is dynamic
     //returns a status code instead of automatically showing it in the HRIS
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse response =  employeeService.updateEmployee(id, employeeRequest);
         return ResponseEntity.ok(response);
     }
 
-    // ENDPOINT: api/employees/search/{status}
-    //status is dynamic
-    //search employees by status
-    @GetMapping("/search/{status}")
-    public List<EmployeeResponse> searchByEmploymentStatus(@PathVariable EmploymentStatus status) {
-        return employeeService.findByStatus(status);
+    // ENDPOINT: api/employees/status/id
+    // id is dynamic
+    @PatchMapping("status/{id}")
+    public EmployeeResponse updateStatus(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
+        return employeeService.updateStatus(id, employeeRequest);
     }
-
-    // ENDPOINT: api/employees/search/{position}
-    //position is dynamic
-    //search employees by position
-    @GetMapping("search/{position}")
-    public List<EmployeeResponse> searchByPosition(@PathVariable Position position) {
-        return employeeService.findByPosition(position);
-    }
-
-//    @PatchMapping("/{id}/update/status")
-//    public EmployeeResponse updateStatus(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
-//
-//    }
-//
-//    @PatchMapping("/{id}/update/position")
-//    public EmployeeResponse updatePosition(@PathVariable Long id, @RequestBody Position position) {
-//
-//    }
-
-
-
-
-
 
     /*
         FOR EMPLOYEE ROLE
         make sure only the specific employee can access their id
      */
 
-//    @GetMapping("/{id}/bank-accounts")
-//    public BankAccountDto getBankAccounts(@PathVariable Long id) {
-//
-//    }
-//
-//    @PostMapping("/{id}/bank-accounts")
-//    public BankAccountDto createBankAccount(@PathVariable Long id, BankAccountDto bankDetails) {
-//
-//    }
-//
-//    @GetMapping("/{id}/notifications")
-//    public List<Notification> getAllNotifications(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("/{id}/leave-requests")
-//    public List<LeaveRequest> getAllLeaveRequests(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("{id}/leave-balance")
-//    public BigDecimal getLeaveBalance(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("/{id}/payroll-items")
-//    public List<PayrollItem> getAllPayrollItems(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("/{id}/user-account")
-//    public UserAccountDto getUserAccount(@PathVariable Long id) {
-//
-//    }
-//
-//    @PatchMapping("/{id}/update/address")
-//    public EmployeeResponse updateAddress(@PathVariable Long id, Address address) {
-//
-//    }
+    @GetMapping("/{id}/bank-accounts")
+    public BankAccountDto getBankAccounts(@PathVariable Long id) {
+
+    }
+
+    @PostMapping("/{id}/bank-accounts")
+    public BankAccountDto createBankAccount(@PathVariable Long id, BankAccountDto bankDetails) {
+
+    }
+
+    @GetMapping("/{id}/notifications")
+    public List<Notification> getAllNotifications(@PathVariable Long id) {
+
+    }
+
+    @GetMapping("/{id}/leave-requests")
+    public List<LeaveRequest> getAllLeaveRequests(@PathVariable Long id) {
+
+    }
+
+    @GetMapping("{id}/leave-balance")
+    public BigDecimal getLeaveBalance(@PathVariable Long id) {
+
+    }
+
+    @GetMapping("/{id}/payroll-items")
+    public List<PayrollItem> getAllPayrollItems(@PathVariable Long id) {
+
+    }
+
+    @GetMapping("/{id}/user-account")
+    public UserAccountDto getUserAccount(@PathVariable Long id) {
+
+    }
+
+    @PatchMapping("/{id}/update/address")
+    public EmployeeResponse updateAddress(@PathVariable Long id, Address address) {
+
+    }
 
 }

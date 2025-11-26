@@ -61,13 +61,13 @@ public class EmployeeService {
         return employeeMapper.employeeToEmployeeResponse(emp);
     }
 
-    public List<EmployeeResponse> findByStatus(EmploymentStatus status) {
+    public EmployeeResponse updateStatus(Long id, EmployeeRequest updated) {
+        Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         //security
-        return employeeMapper.employeesToEmployeeResponses(employeeRepository.findByEmploymentStatus(status));
+
+        emp.setEmploymentStatus(updated.getEmploymentStatus());
+        employeeRepository.save(emp);
+        return employeeMapper.employeeToEmployeeResponse(emp);
     }
 
-    public List<EmployeeResponse> findByPosition(Position position) {
-        //security
-        return employeeMapper.employeesToEmployeeResponses(employeeRepository.findByPosition(position));
-    }
 }

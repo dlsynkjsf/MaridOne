@@ -3,6 +3,7 @@ package org.example.maridone.payroll;
 import jakarta.persistence.*;
 import org.example.maridone.enums.Status;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,10 +23,10 @@ public class DisputeRequest {
     private Status status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
@@ -51,19 +52,19 @@ public class DisputeRequest {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 

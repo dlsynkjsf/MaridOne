@@ -12,6 +12,7 @@ import org.example.maridone.enums.Position;
 import org.example.maridone.embeddable.Address;
 import org.example.maridone.leave.LeaveBalance;
 import org.example.maridone.leave.LeaveRequest;
+import org.example.maridone.log.ActivityLog;
 import org.example.maridone.notification.Notification;
 import org.example.maridone.payroll.OvertimeRequest;
 import org.example.maridone.payroll.PayrollItem;
@@ -78,6 +79,9 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OvertimeRequest> overtimeRequests;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ActivityLog> activityLogs;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private LeaveBalance leaveBalance;
@@ -215,5 +219,13 @@ public class Employee {
 
     public void setOvertimeRequests(List<OvertimeRequest> overtimeRequests) {
         this.overtimeRequests = overtimeRequests;
+    }
+
+    public List<ActivityLog> getActivityLogs() {
+        return activityLogs;
+    }
+
+    public void setActivityLogs(List<ActivityLog> activityLogs) {
+        this.activityLogs = activityLogs;
     }
 }

@@ -1,4 +1,4 @@
-package org.example.maridone.attendance;
+package org.example.maridone.log;
 
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
