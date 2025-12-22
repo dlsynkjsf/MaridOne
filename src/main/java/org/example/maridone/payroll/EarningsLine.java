@@ -25,10 +25,10 @@ public class EarningsLine {
     private OvertimeRequest overtimeRequest;
 
     @Column(name = "hours", nullable = false)
-    private double hours;
+    private BigDecimal hours;
 
     @Column(name = "rate", nullable = false)
-    private double rate;
+    private BigDecimal rate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
@@ -45,19 +45,27 @@ public class EarningsLine {
         this.payrollItem = payrollItem;
     }
 
-    public double getHours() {
+    public OvertimeRequest getOvertimeRequest() {
+        return overtimeRequest;
+    }
+
+    public void setOvertimeRequest(OvertimeRequest overtimeRequest) {
+        this.overtimeRequest = overtimeRequest;
+    }
+
+    public BigDecimal getHours() {
         return hours;
     }
 
-    public void setHours(double hours) {
+    public void setHours(BigDecimal hours) {
         this.hours = hours;
     }
 
-    public double getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 

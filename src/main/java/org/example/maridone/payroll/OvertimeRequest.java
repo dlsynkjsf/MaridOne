@@ -24,7 +24,7 @@ public class OvertimeRequest {
     @JoinColumn(name = "emp_id", nullable = false)
     private Employee employee;
 
-    @OneToMany(mappedBy = "earnings_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "earningsId", cascade = CascadeType.ALL)
     private List<EarningsLine> lines;
 
     @Column(name = "request_status")

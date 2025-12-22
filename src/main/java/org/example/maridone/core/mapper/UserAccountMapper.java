@@ -1,6 +1,6 @@
 package org.example.maridone.core.mapper;
 
-import org.example.maridone.core.dto.UserAccountDto;
+import org.example.maridone.core.user.UserAccountDto;
 import org.example.maridone.core.user.UserAccount;
 import org.mapstruct.Mapper;
 

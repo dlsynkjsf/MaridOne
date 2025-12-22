@@ -15,7 +15,10 @@ public class DisputeRequest {
     @Column(name = "dispute_id", nullable = false)
     private Long disputeId;
 
-    @Column(name = "reason", nullable = false)
+    @Column(name = "subject", nullable = false)
+    private String subject;
+
+    @Column(name = "reason", nullable = true)
     private String reason;
 
     @Column(name = "status", nullable = false)
@@ -34,6 +37,14 @@ public class DisputeRequest {
 
     public Long getDisputeId() {
         return disputeId;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getReason() {

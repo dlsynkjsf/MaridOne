@@ -1,8 +1,11 @@
 package org.example.maridone.core.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.example.maridone.core.document.DocumentPath;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.AccountStatus;
+
+import java.util.List;
 
 @Entity
 @Table(name = "user_account")
@@ -23,6 +26,9 @@ public class UserAccount {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id",nullable = false)
     private Employee employee;
+
+    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DocumentPath> documentPaths;
 
     public String getUsername() {
         return username;
@@ -54,5 +60,13 @@ public class UserAccount {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public List<DocumentPath> getDocumentPaths() {
+        return documentPaths;
+    }
+
+    public void setDocumentPaths(List<DocumentPath> documentPaths) {
+        this.documentPaths = documentPaths;
     }
 }

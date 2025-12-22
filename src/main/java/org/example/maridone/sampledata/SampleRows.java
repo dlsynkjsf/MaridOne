@@ -16,6 +16,7 @@ import org.example.maridone.payroll.run.PayrollRun;
 import org.example.maridone.payroll.run.PayrollRunRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
@@ -34,6 +35,9 @@ public class SampleRows {
 
     @Autowired
     PayrollRunRepository payrollRunRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
@@ -115,7 +119,7 @@ public class SampleRows {
             UserAccount userAccount = new UserAccount();
             userAccount.setAccountStatus(AccountStatus.ACTIVE);
             userAccount.setEmployee(emp);
-            userAccount.setPasswordHash("passwordHash" + i);
+            userAccount.setPasswordHash(passwordEncoder.encode("test"));
             userAccount.setUsername("userName" + i);
             emp.setUserAccount(userAccount);
 
