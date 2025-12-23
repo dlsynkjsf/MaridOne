@@ -5,5 +5,6 @@ public enum Position {
     HR,
     ACCOUNTING,
     EMPLOYEE,
+    MANAGER,
     UNKNOWN
 }

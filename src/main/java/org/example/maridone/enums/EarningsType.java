@@ -1,5 +1,6 @@
 package org.example.maridone.enums;
 
+//for OvertimeRequest
 public enum EarningsType {
     BASIC,
     OVERTIME,
@@ -7,5 +8,6 @@ public enum EarningsType {
     TRIPLE_OVERTIME,
     HOLIDAY,
     ALLOWANCE,
-    NIGHTDIFF
+    NIGHTDIFF,
+    FIXED
 }
