@@ -1,7 +1,8 @@
 package org.example.maridone.core.mapper;
 
-import org.example.maridone.core.dto.EmployeeRequest;
-import org.example.maridone.core.dto.EmployeeResponse;
+import org.example.maridone.core.dto.EmployeeDetailsDto;
+import org.example.maridone.core.dto.EmployeeRequestDto;
+import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.employee.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,11 +13,14 @@ import java.util.List;
 public interface EmployeeMapper {
 
     @Mapping(source = "employeeId", target = "id")
-    EmployeeResponse employeeToEmployeeResponse(Employee employee);
+    EmployeeResponseDto employeeToEmployeeResponse(Employee employee);
 
     @Mapping(source = "employeeId", target = "id")
-    List<EmployeeResponse> employeesToEmployeeResponses(List<Employee> employees);
+    EmployeeDetailsDto employeeToEmployeeDetailsDto(Employee employee);
 
-    Employee employeeRequestToEmployee(EmployeeRequest employeeRequest);
+    @Mapping(source = "employeeId", target = "id")
+    List<EmployeeResponseDto> employeesToEmployeeResponses(List<Employee> employees);
+
+    Employee employeeRequestToEmployee(EmployeeRequestDto employeeRequestDto);
 
 }

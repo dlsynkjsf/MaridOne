@@ -1,8 +1,10 @@
 package org.example.maridone.notification;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 
@@ -18,13 +20,17 @@ public class Notification {
     private String message;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "read_status", nullable = false)
     private boolean readStatus;
 
+    @Column(name = "importance", nullable = false)
+    private String importance;
+
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnore
     private Employee employee;
 
     public Long getNotificationId() {
@@ -40,11 +46,11 @@ public class Notification {
         this.message = message;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -54,6 +60,14 @@ public class Notification {
 
     public void setReadStatus(boolean readStatus) {
         this.readStatus = readStatus;
+    }
+
+    public String getImportance() {
+        return importance;
+    }
+
+    public void setImportance(String importance) {
+        this.importance = importance;
     }
 
     public Employee getEmployee() {

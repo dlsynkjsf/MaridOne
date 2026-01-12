@@ -21,8 +21,10 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class SampleRows {
         payrollRun.setPeriodEnd(LocalDate.now());
         payrollRunRepository.save(payrollRun);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             Employee emp = new Employee();
             LocalDate birthDate = LocalDate.of(2000, 10, i+1);
             Address address = new Address();
@@ -69,6 +71,7 @@ public class SampleRows {
             }
             emp.setLastName("lastName" + (i*2));
             emp.setBirthDate(birthDate);
+            emp.setEmploymentDate(LocalDate.now());
             switch(i) {
                 case 1: {
                     emp.setEmploymentStatus(EmploymentStatus.REGULAR);
@@ -169,8 +172,12 @@ public class SampleRows {
         for (int j = 0; j < 5; j++) {
             Notification notification = new Notification();
             notification.setMessage("Sample notification message " + j);
-            notification.setCreatedAt(LocalDateTime.now().minusDays(i));
+            notification.setCreatedAt(Instant.now().minus(i, ChronoUnit.DAYS));
             notification.setReadStatus(j % 2 == 0);
+            if (j == 2)
+                notification.setImportance("HIGH");
+            else
+                notification.setImportance("LOW");
             notification.setEmployee(emp);
             notifications.add(notification);
         }

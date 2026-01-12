@@ -50,6 +50,9 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
+    @Column(name = "employment_date", nullable = false)
+    private LocalDate employmentDate;
+
     @NotBlank
     @Column(name = "email", nullable = false, length = 254)
     @Email
@@ -131,6 +134,14 @@ public class Employee {
 
     public void setEmploymentStatus(EmploymentStatus employmentStatus) {
         this.employmentStatus = employmentStatus;
+    }
+
+    public LocalDate getEmploymentDate() {
+        return employmentDate;
+    }
+
+    public void setEmploymentDate(LocalDate employmentDate) {
+        this.employmentDate = employmentDate;
     }
 
     public String getEmail() {

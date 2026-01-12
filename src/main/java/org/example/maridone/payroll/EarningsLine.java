@@ -1,5 +1,6 @@
 package org.example.maridone.payroll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.hibernate.sql.ast.tree.expression.Over;
@@ -18,6 +19,7 @@ public class EarningsLine {
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
+    @JsonIgnore
     private PayrollItem payrollItem;
 
     @ManyToOne

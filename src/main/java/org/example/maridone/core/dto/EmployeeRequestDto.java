@@ -1,24 +1,23 @@
 package org.example.maridone.core.dto;
+
+import org.example.maridone.embeddable.Address;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
 
-public class EmployeeResponse {
+import java.time.LocalDate;
 
-    private Long id;
+public class EmployeeRequestDto {
+
     private String firstName;
     private String middleName;
     private String lastName;
+    private LocalDate birthDate;
     private EmploymentStatus employmentStatus;
+    private String email;
+    private String phoneNumber;
     private Position position;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Address address;
 
     public String getFirstName() {
         return firstName;
@@ -44,6 +43,14 @@ public class EmployeeResponse {
         this.lastName = lastName;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public EmploymentStatus getEmploymentStatus() {
         return employmentStatus;
     }
@@ -52,6 +59,21 @@ public class EmployeeResponse {
         this.employmentStatus = employmentStatus;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public Position getPosition() {
         return position;
@@ -59,5 +81,13 @@ public class EmployeeResponse {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

@@ -1,16 +1,12 @@
 package org.example.maridone.core.employee;
 
-import org.example.maridone.core.dto.EmployeeRequest;
-import org.example.maridone.core.dto.EmployeeResponse;
+import org.example.maridone.core.dto.EmployeeDetailsDto;
+import org.example.maridone.core.dto.EmployeeRequestDto;
+import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.mapper.EmployeeMapper;
-import org.example.maridone.enums.EmploymentStatus;
-import org.example.maridone.enums.Position;
 import org.example.maridone.exception.EmployeeNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,24 +21,29 @@ public class EmployeeService {
     }
 
 
-    public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
+    public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
         //security
-        Employee employee = employeeMapper.employeeRequestToEmployee(employeeRequest);
+        Employee employee = employeeMapper.employeeRequestToEmployee(employeeRequestDto);
         employeeRepository.save(employee);
         return employeeMapper.employeeToEmployeeResponse(employee);
     }
 
-    public List<EmployeeResponse> getAllEmployees() {
+    public List<EmployeeResponseDto> getAllEmployees() {
         return employeeMapper.employeesToEmployeeResponses(employeeRepository.findAll());
     }
 
-    public EmployeeResponse getEmployee(Long id) {
+    public EmployeeResponseDto getEmployee(Long id) {
 
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         return employeeMapper.employeeToEmployeeResponse(emp);
     }
 
-    public EmployeeResponse updateEmployee(Long id, EmployeeRequest updated) {
+    public EmployeeDetailsDto getSelfEmployee(Long id) {
+        Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+        return employeeMapper.employeeToEmployeeDetailsDto(emp);
+    }
+
+    public EmployeeResponseDto updateEmployee(Long id, EmployeeRequestDto updated) {
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         //security
 
@@ -61,7 +62,7 @@ public class EmployeeService {
         return employeeMapper.employeeToEmployeeResponse(emp);
     }
 
-    public EmployeeResponse updateStatus(Long id, EmployeeRequest updated) {
+    public EmployeeResponseDto updateStatus(Long id, EmployeeRequestDto updated) {
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         //security
 

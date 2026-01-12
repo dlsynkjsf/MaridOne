@@ -1,6 +1,7 @@
 package org.example.maridone.payroll;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.payroll.run.PayrollRun;
@@ -30,13 +31,13 @@ public class PayrollItem {
     @Column(name = "net_pay", nullable = false)
     private BigDecimal netPay;
 
-    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DeductionsLine> deductions;
 
-    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EarningsLine> earnings;
 
-    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payrollItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DisputeRequest> disputes;
 
     public long getItemId() {

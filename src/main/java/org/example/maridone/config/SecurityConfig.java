@@ -1,34 +1,44 @@
 package org.example.maridone.config;
 
 import org.example.maridone.exception.NoRoleAssignedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
+    @Autowired
+    private Environment env;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     }
 
-    //SECURITYFILTERCHAIN
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
+        if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+            http
+                    .httpBasic(Customizer.withDefaults())
+                    .csrf(customizer -> customizer.disable());
+        }
         //Todo: OWASP top 10
         return http
-                .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/html/login.html", "/html/index.html", "/css/**", "/js/**", "/assets/**")
+                        .requestMatchers("/html/*", "/css/**", "/js/**", "/assets/**")
                         .permitAll()
                         .requestMatchers("/html/accounting/**")
                         .hasRole("ACCOUNTING")
@@ -50,6 +60,7 @@ public class SecurityConfig {
                         .successHandler(authenticationSuccessHandler())
                         .permitAll()
                 )
+
                 .build();
     }
 
@@ -60,24 +71,15 @@ public class SecurityConfig {
             String url;
 
             switch(authority) {
-                case "ROLE_EMPLOYEE": {
-                    url = "/html/employee/ss_dashboard.html";
+                case "ROLE_EMPLOYEE":
+                case "ROLE_MANAGEMENT":
+                case "ROLE_HR":
+                case "ROLE_MANAGER": {
+                    url = "/html/ss_dashboard.html";
                     break;
                 }
                 case "ROLE_ACCOUNTING": {
-                    url  = "/html/accounting/ss_dashboard.html";
-                    break;
-                }
-                case "ROLE_MANAGEMENT": {
-                    url = "/html/management/ss_dashboard.html";
-                    break;
-                }
-                case "ROLE_HR": {
-                    url = "/html/hr/ss_dashboard.html";
-                    break;
-                }
-                case "ROLE_MANAGER": {
-                    url = "/html/manager/ss_dashboard.html";
+                    url  = "/html/accounting/payroll_dashboard.html";
                     break;
                 }
                 case "ROLE_UNKNOWN": {

@@ -1,5 +1,6 @@
 package org.example.maridone.payroll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.enums.Status;
 
@@ -33,6 +34,7 @@ public class DisputeRequest {
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
+    @JsonIgnore
     private PayrollItem payrollItem;
 
     public Long getDisputeId() {

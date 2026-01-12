@@ -1,5 +1,6 @@
 package org.example.maridone.payroll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.EarningsType;
@@ -22,6 +23,7 @@ public class OvertimeRequest {
 
     @ManyToOne
     @JoinColumn(name = "emp_id", nullable = false)
+    @JsonIgnore
     private Employee employee;
 
     @OneToMany(mappedBy = "earningsId", cascade = CascadeType.ALL)
@@ -38,9 +40,9 @@ public class OvertimeRequest {
     private LocalDate workDate;
 
     @Column(name = "start_time")
-    private LocalDateTime startTime;
+    private Instant startTime;
     @Column(name = "end_time")
-    private LocalDateTime endTime;
+    private Instant endTime;
 
     @Column(name = "hours")
     private BigDecimal hours;
@@ -93,19 +95,19 @@ public class OvertimeRequest {
         this.workDate = workDate;
     }
 
-    public LocalDateTime getStartTime() {
+    public Instant getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public Instant getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Instant endTime) {
         this.endTime = endTime;
     }
 
