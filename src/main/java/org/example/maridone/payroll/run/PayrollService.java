@@ -1,15 +1,14 @@
 package org.example.maridone.payroll.run;
 
-import org.example.maridone.core.employee.Employee;
-import org.example.maridone.core.employee.EmployeeRepository;
-import org.example.maridone.exception.EmployeeNotFoundException;
+import org.example.maridone.core.employee.EmployeeService;
 import org.example.maridone.payroll.PayrollItem;
+import org.example.maridone.payroll.itemcomponent.DeductionsService;
 import org.example.maridone.payroll.dto.ItemDetailsDto;
+import org.example.maridone.payroll.itemcomponent.EarningsService;
 import org.example.maridone.payroll.mapper.PayrollMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,19 +16,25 @@ public class PayrollService {
 
     private final PayrollRunRepository payrollRunRepository;
     private final PayrollItemRepository payrollItemRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
+    private final EarningsService earningsService;
+    private final DeductionsService deductionsService;
     private final PayrollMapper payrollMapper;
 
     PayrollService(
             PayrollRunRepository payrollRunRepository,
             PayrollItemRepository payrollItemRepository,
-            EmployeeRepository employeeRepository,
+            EmployeeService employeeService,
+            EarningsService earningsService,
+            DeductionsService deductionsService,
             PayrollMapper payrollMapper
     )
     {
         this.payrollRunRepository = payrollRunRepository;
         this.payrollItemRepository = payrollItemRepository;
-        this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
+        this.earningsService = earningsService;
+        this.deductionsService = deductionsService;
         this.payrollMapper = payrollMapper;
     }
 
@@ -40,6 +45,7 @@ public class PayrollService {
 
         return itemsDto;
     }
+
 
 
     //all methods must be locked pessimistically

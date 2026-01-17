@@ -17,8 +17,6 @@ public class UserLoginService implements UserDetailsService {
         this.userAccountRepository = userAccountRepository;
     }
 
-
-
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

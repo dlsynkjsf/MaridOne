@@ -1,16 +1,21 @@
 package org.example.maridone.sampledata;
 
+import org.example.maridone.calendar.CalendarRepository;
+import org.example.maridone.calendar.CompanyCalendar;
+import org.example.maridone.calendar.ShiftRepository;
+import org.example.maridone.calendar.ShiftSchedule;
 import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.employee.EmployeeRepository;
 import org.example.maridone.core.user.UserAccount;
 import org.example.maridone.embeddable.Address;
 import org.example.maridone.enums.*;
-import org.example.maridone.leave.LeaveBalance;
-import org.example.maridone.leave.LeaveRequest;
+import org.example.maridone.leave.balance.LeaveBalance;
+import org.example.maridone.leave.request.LeaveRequest;
 import org.example.maridone.notification.Notification;
-import org.example.maridone.payroll.DeductionsLine;
-import org.example.maridone.payroll.EarningsLine;
+import org.example.maridone.payroll.dispute.DisputeRequest;
+import org.example.maridone.payroll.itemcomponent.DeductionsLine;
+import org.example.maridone.payroll.itemcomponent.EarningsLine;
 import org.example.maridone.payroll.PayrollItem;
 import org.example.maridone.payroll.run.PayrollRun;
 import org.example.maridone.payroll.run.PayrollRunRepository;
@@ -21,9 +26,10 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +45,12 @@ public class SampleRows {
     PayrollRunRepository payrollRunRepository;
 
     @Autowired
+    CalendarRepository calendarRepository;
+
+    @Autowired
+    ShiftRepository shiftRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @PostConstruct
@@ -51,6 +63,14 @@ public class SampleRows {
         List<Employee> employees = new ArrayList<>();
         List<PayrollItem> items = new ArrayList<>();
         PayrollRun payrollRun = new PayrollRun();
+        CompanyCalendar companyEvent;
+        CompanyCalendar companyEvent2;
+        companyEvent = calendarEvents(new CompanyCalendar(), 1);
+        companyEvent2 = calendarEvents(new CompanyCalendar(), 2);
+
+        calendarRepository.save(companyEvent);
+        calendarRepository.save(companyEvent2);
+
 
         payrollRun.setPayrollStatus(PayrollStatus.IN_PROGRESS);
         payrollRun.setRunType(RunType.REGULAR);
@@ -62,8 +82,6 @@ public class SampleRows {
             Employee emp = new Employee();
             LocalDate birthDate = LocalDate.of(2000, 10, i+1);
             Address address = new Address();
-
-
 
             emp.setFirstName("firstName" + i);
             if (i == 5 || i == 8) {
@@ -137,8 +155,11 @@ public class SampleRows {
             List<LeaveRequest> leaveRequests = createLeave(emp, i);
             emp.setRequests(leaveRequests);
 
-            LeaveBalance leaveBalance = createBalance(emp, i);
+            List<LeaveBalance> leaveBalance = createBalance(emp, i);
             emp.setLeaveBalance(leaveBalance);
+
+            List<ShiftSchedule> schedule = employeeSchedule(emp, i);
+            emp.setShifts(schedule);
 
             employeeRepository.save(emp);
         }
@@ -196,7 +217,7 @@ public class SampleRows {
         leaveRequest.setApprover("Manager " + i);
 
 
-        leaveRequest.setRequestStatus(i % 2 == 0 ? "Approved" : "Pending");
+        leaveRequest.setRequestStatus((i % 2 == 0 ? Status.APPROVED : Status.PENDING));
 
 
         leaveRequest.setReason("Vacation request #" + i);
@@ -206,36 +227,116 @@ public class SampleRows {
         return leaveRequests;
     }
 
-    public static LeaveBalance createBalance(Employee emp, int i) {
-        return new LeaveBalance(emp, BigDecimal.valueOf(5.22));
+    public static List<LeaveBalance> createBalance(Employee emp, int i) {
+        List<LeaveBalance> balances =  new ArrayList<>();
+        LeaveType[] leaves = LeaveType.values();
+        LeaveBalance leaveBalance = new LeaveBalance();
+        leaveBalance.setEmployee(emp);
+        leaveBalance.setBalanceHours(new BigDecimal(i*24));
+        leaveBalance.setLeaveType(leaves[i%7]);
+        balances.add(leaveBalance);
+        return balances;
     }
 
     public static PayrollItem createPayrollItem(Employee emp, int i, PayrollRun payrollRun) {
         PayrollItem payrollItem = new PayrollItem();
 
-        for (int j = 0; j < 5; j++) {
-            payrollItem.setEmployee(emp);
-            payrollItem.setPayrollRun(payrollRun);
-            payrollItem.setGrossPay(BigDecimal.valueOf(5000));
-            payrollItem.setNetPay(BigDecimal.valueOf(5000));
-            payrollItem.setDeductions(new ArrayList<>());
-            payrollItem.setEarnings(new ArrayList<>());
-            payrollItem.setDisputes(new ArrayList<>());
-        }
+        payrollItem.setEmployee(emp);
+        payrollItem.setPayrollRun(payrollRun);
+        payrollItem.setGrossPay(BigDecimal.valueOf(5000));
+        payrollItem.setNetPay(BigDecimal.valueOf(3000));
+        payrollItem.setDeductions(deductionLines(payrollItem, 2));
+        payrollItem.setEarnings(earningLines(payrollItem, 5));
+        payrollItem.setDisputes(newDispute(i, payrollItem));
 
         return payrollItem;
     }
 
-    public static List<DeductionsLine> deductionLines(Employee emp, int i) {
-        List<DeductionsLine> deductionLines = new ArrayList<>();
+    public static List<DeductionsLine> deductionLines(PayrollItem item, int count) {
+        List<DeductionsLine> deductions = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            DeductionsLine deduction = new DeductionsLine();
+            deduction.setPayrollItem(item);
+            deduction.setAmount(BigDecimal.valueOf(1000));
+            if (i == 0)
+                deduction.setDeductionType(DeductionType.SSS);
+            else
+                deduction.setDeductionType(DeductionType.PHILHEALTH);
+            deductions.add(deduction);
+        }
 
-        return deductionLines;
+        return deductions;
     }
 
-    public static List<EarningsLine> earningLines(Employee emp, int i) {
-        List<EarningsLine> earningLines = new ArrayList<>();
+    public static List<EarningsLine> earningLines(PayrollItem item, int count) {
+        List<EarningsLine> earnings = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            EarningsLine earning = new EarningsLine();
+            earning.setPayrollItem(item);
+            earning.setAmount(BigDecimal.valueOf(1000));
+            earning.setEarningsDate(LocalDate.now().minusDays(i));
+            earning.setHours(BigDecimal.valueOf(5+i));
+            earning.setOvertime(false);
+            earning.setRate(BigDecimal.valueOf(100));
+            earnings.add(earning);
+        }
 
-        return earningLines;
+        return earnings;
+    }
+
+    public static CompanyCalendar calendarEvents(CompanyCalendar calendar, int i) {
+        if (i == 1) {
+            calendar.setStartDate(Instant.now().minus(7, ChronoUnit.DAYS));
+            calendar.setEndDate(Instant.now().minus(5, ChronoUnit.DAYS));
+            calendar.setTitle("Teambuilding");
+        } else {
+            calendar.setStartDate(Instant.now().minus(4, ChronoUnit.DAYS));
+            calendar.setEndDate(Instant.now().minus(2, ChronoUnit.DAYS));
+            calendar.setTitle("Another event");
+        }
+
+        return calendar;
+    }
+
+    public static List<ShiftSchedule> employeeSchedule(Employee emp, int i) {
+        List<ShiftSchedule> shiftSchedules = new ArrayList<>();
+        for (int k = 1; k <= 7; k++) {
+            ShiftSchedule shiftSchedule = new ShiftSchedule();
+            shiftSchedule.setEmployee(emp);
+            shiftSchedule.setDayOfWeek(k);
+            if (k == 1)
+                shiftSchedule.setEarningsType(EarningsType.BASIC);
+            else if(k == 2)
+                shiftSchedule.setEarningsType(EarningsType.DOUBLE_OVERTIME);
+            else
+                shiftSchedule.setEarningsType(EarningsType.OVERTIME);
+            shiftSchedule.setStartTime(OffsetTime.now().minusHours(k));
+            shiftSchedule.setEndTime(OffsetTime.now());
+            shiftSchedule.setTitle(DayOfWeek.of(k).toString());
+            shiftSchedules.add(shiftSchedule);
+        }
+        return shiftSchedules;
+    }
+
+    public static List<DisputeRequest> newDispute(int num, PayrollItem item) {
+        List<DisputeRequest> disputes = new ArrayList<>();
+        DisputeRequest dispute = new DisputeRequest();
+
+        dispute.setSubject("Subject of Dispute " + num);
+        if (num % 2 == 0)
+            dispute.setStatus(Status.PENDING);
+        else if (num == 5)
+            dispute.setStatus(Status.REJECTED);
+        else
+            dispute.setStatus(Status.APPROVED);
+        dispute.setCreatedAt(Instant.now());
+        dispute.setReason("Reason of Dispute " + num);
+        dispute.setUpdatedAt(null);
+        dispute.setStatusReason(null);
+        dispute.setPayrollItem(item);
+
+        disputes.add(dispute);
+        return disputes;
     }
 }
 

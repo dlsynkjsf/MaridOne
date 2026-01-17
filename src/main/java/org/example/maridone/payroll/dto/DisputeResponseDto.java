@@ -1,44 +1,26 @@
-package org.example.maridone.payroll;
+package org.example.maridone.payroll.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import org.example.maridone.enums.Status;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "dispute_request")
-public class DisputeRequest {
+public class DisputeResponseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "dispute_id", nullable = false)
-    private Long disputeId;
-
-    @Column(name = "subject", nullable = false)
+    private Long id;
     private String subject;
-
-    @Column(name = "reason", nullable = true)
     private String reason;
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
-
-    @Column(name = "updated_at")
     private Instant updatedAt;
+    private String statusReason;
+    private Long itemId;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    @JsonIgnore
-    private PayrollItem payrollItem;
+    public Long getId() {
+        return id;
+    }
 
-    public Long getDisputeId() {
-        return disputeId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSubject() {
@@ -81,11 +63,20 @@ public class DisputeRequest {
         this.updatedAt = updatedAt;
     }
 
-    public PayrollItem getPayrollItem() {
-        return payrollItem;
+    public String getStatusReason() {
+        return statusReason;
     }
 
-    public void setPayrollItem(PayrollItem payrollItem) {
-        this.payrollItem = payrollItem;
+    public void setStatusReason(String statusReason) {
+        this.statusReason = statusReason;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 }
+

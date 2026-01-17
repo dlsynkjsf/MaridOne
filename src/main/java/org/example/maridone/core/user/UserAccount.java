@@ -1,4 +1,5 @@
 package org.example.maridone.core.user;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.example.maridone.core.document.DocumentPath;
@@ -25,6 +26,7 @@ public class UserAccount {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id",nullable = false)
+    @JsonIgnore
     private Employee employee;
 
     @OneToMany(mappedBy = "username", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

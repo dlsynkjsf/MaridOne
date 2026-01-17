@@ -4,6 +4,9 @@ package org.example.maridone.payroll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
+import org.example.maridone.payroll.dispute.DisputeRequest;
+import org.example.maridone.payroll.itemcomponent.DeductionsLine;
+import org.example.maridone.payroll.itemcomponent.EarningsLine;
 import org.example.maridone.payroll.run.PayrollRun;
 
 import java.math.BigDecimal;
@@ -19,15 +22,18 @@ public class PayrollItem {
 
     @ManyToOne
     @JoinColumn(name = "emp_id", nullable = false)
+    @JsonIgnore
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "pay_id", nullable = false)
     private PayrollRun payrollRun;
 
+    //calculate by earnings
     @Column(name = "gross_pay", nullable = false)
     private BigDecimal grossPay;
 
+    //calculate by earnings - deductions
     @Column(name = "net_pay", nullable = false)
     private BigDecimal netPay;
 

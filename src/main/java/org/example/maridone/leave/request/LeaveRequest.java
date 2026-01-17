@@ -1,7 +1,8 @@
-package org.example.maridone.leave;
+package org.example.maridone.leave.request;
 
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
+import org.example.maridone.enums.Status;
 
 import java.time.LocalDate;
 
@@ -27,7 +28,8 @@ public class LeaveRequest {
     private String approver;
 
     @Column(name = "request_status", nullable = false)
-    private String requestStatus;
+    @Enumerated(EnumType.STRING)
+    private Status requestStatus;
 
     @Column(name = "reason", nullable = false)
     private String reason;
@@ -68,11 +70,11 @@ public class LeaveRequest {
         this.approver = approver;
     }
 
-    public String getRequestStatus() {
+    public Status getRequestStatus() {
         return requestStatus;
     }
 
-    public void setRequestStatus(String requestStatus) {
+    public void setRequestStatus(Status requestStatus) {
         this.requestStatus = requestStatus;
     }
 

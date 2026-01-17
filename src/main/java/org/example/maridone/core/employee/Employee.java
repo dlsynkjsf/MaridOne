@@ -5,13 +5,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.example.maridone.calendar.ShiftSchedule;
 import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.core.user.UserAccount;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
 import org.example.maridone.embeddable.Address;
-import org.example.maridone.leave.LeaveBalance;
-import org.example.maridone.leave.LeaveRequest;
+import org.example.maridone.leave.balance.LeaveBalance;
+import org.example.maridone.leave.request.LeaveRequest;
 import org.example.maridone.log.ActivityLog;
 import org.example.maridone.notification.Notification;
 import org.example.maridone.payroll.OvertimeRequest;
@@ -86,8 +87,11 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ActivityLog> activityLogs;
 
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private LeaveBalance leaveBalance;
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ShiftSchedule> shifts;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<LeaveBalance> leaveBalance;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private UserAccount userAccount;
@@ -208,11 +212,11 @@ public class Employee {
         this.payrollItems = payrollItems;
     }
 
-    public LeaveBalance getLeaveBalance() {
+    public List<LeaveBalance> getLeaveBalance() {
         return leaveBalance;
     }
 
-    public void setLeaveBalance(LeaveBalance leaveBalance) {
+    public void setLeaveBalance(List<LeaveBalance> leaveBalance) {
         this.leaveBalance = leaveBalance;
     }
 
@@ -238,5 +242,13 @@ public class Employee {
 
     public void setActivityLogs(List<ActivityLog> activityLogs) {
         this.activityLogs = activityLogs;
+    }
+
+    public List<ShiftSchedule> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<ShiftSchedule> shifts) {
+        this.shifts = shifts;
     }
 }

@@ -5,12 +5,10 @@ import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.EarningsType;
 import org.example.maridone.enums.Status;
+import org.example.maridone.payroll.itemcomponent.EarningsLine;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "overtime_request")
@@ -26,8 +24,8 @@ public class OvertimeRequest {
     @JsonIgnore
     private Employee employee;
 
-    @OneToMany(mappedBy = "earningsId", cascade = CascadeType.ALL)
-    private List<EarningsLine> lines;
+    @OneToOne(mappedBy = "overtimeRequest", cascade = CascadeType.ALL)
+    private EarningsLine earningsLine;
 
     @Column(name = "request_status")
     @Enumerated(EnumType.STRING)
@@ -43,9 +41,6 @@ public class OvertimeRequest {
     private Instant startTime;
     @Column(name = "end_time")
     private Instant endTime;
-
-    @Column(name = "hours")
-    private BigDecimal hours;
 
     @Column(name = "overtime_type")
     private EarningsType overtimeType;
@@ -69,14 +64,6 @@ public class OvertimeRequest {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    public List<EarningsLine> getLines() {
-        return lines;
-    }
-
-    public void setLines(List<EarningsLine> lines) {
-        this.lines = lines;
     }
 
     public Status getRequestStatus() {
@@ -109,14 +96,6 @@ public class OvertimeRequest {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
-    }
-
-    public BigDecimal getHours() {
-        return hours;
-    }
-
-    public void setHours(BigDecimal hours) {
-        this.hours = hours;
     }
 
     public EarningsType getOvertimeType() {
@@ -157,5 +136,13 @@ public class OvertimeRequest {
 
     public void setApprovedAt(Instant approvedAt) {
         this.approvedAt = approvedAt;
+    }
+
+    public EarningsLine getEarningsLine() {
+        return earningsLine;
+    }
+
+    public void setEarningsLine(EarningsLine earningsLine) {
+        this.earningsLine = earningsLine;
     }
 }

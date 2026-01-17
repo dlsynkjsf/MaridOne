@@ -1,12 +1,12 @@
-package org.example.maridone.payroll;
+package org.example.maridone.payroll.itemcomponent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-import org.hibernate.sql.ast.tree.expression.Over;
+import org.example.maridone.payroll.OvertimeRequest;
+import org.example.maridone.payroll.PayrollItem;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "earnings_line")
@@ -22,18 +22,25 @@ public class EarningsLine {
     @JsonIgnore
     private PayrollItem payrollItem;
 
-    @ManyToOne
-    @JoinColumn(name = "overtime_id", nullable = true)
-    private OvertimeRequest overtimeRequest;
-
-    @Column(name = "hours", nullable = false)
+    @Column(name = "hours", nullable = true)
     private BigDecimal hours;
 
-    @Column(name = "rate", nullable = false)
+    @Column(name = "rate", nullable = true)
     private BigDecimal rate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "earnings_date", nullable = false)
+    private LocalDate earningsDate;
+
+    @Column(name = "is_overtime", nullable = false)
+    private boolean isOvertime;
+
+    @OneToOne
+    @JoinColumn(name = "earningsLine", nullable = true)
+    @JsonIgnore
+    private OvertimeRequest overtimeRequest;
 
     public long getEarningsId() {
         return earningsId;
@@ -45,14 +52,6 @@ public class EarningsLine {
 
     public void setPayrollItem(PayrollItem payrollItem) {
         this.payrollItem = payrollItem;
-    }
-
-    public OvertimeRequest getOvertimeRequest() {
-        return overtimeRequest;
-    }
-
-    public void setOvertimeRequest(OvertimeRequest overtimeRequest) {
-        this.overtimeRequest = overtimeRequest;
     }
 
     public BigDecimal getHours() {
@@ -77,5 +76,29 @@ public class EarningsLine {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public LocalDate getEarningsDate() {
+        return earningsDate;
+    }
+
+    public void setEarningsDate(LocalDate earningsDate) {
+        this.earningsDate = earningsDate;
+    }
+
+    public boolean getOvertime() {
+        return isOvertime;
+    }
+
+    public void setOvertime(boolean overtime) {
+        isOvertime = overtime;
+    }
+
+    public OvertimeRequest getOvertimeRequest() {
+        return overtimeRequest;
+    }
+
+    public void setOvertimeRequest(OvertimeRequest overtimeRequest) {
+        this.overtimeRequest = overtimeRequest;
     }
 }

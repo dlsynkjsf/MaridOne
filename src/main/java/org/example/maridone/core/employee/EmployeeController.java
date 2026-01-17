@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -65,7 +66,7 @@ public class EmployeeController {
     // ENDPOINT: api/employees/self/id
     // for personal details check only
     @GetMapping("/self/{id}")
-    @PreAuthorize("@authCheck.isSelf(#id, authentication.getName())")
+    @PreAuthorize("@userCheck.isSelf(#id, authentication.getName())")
     public EmployeeDetailsDto getSelfEmployee(@PathVariable Long id) {
         return employeeService.getSelfEmployee(id);
     }
@@ -105,17 +106,19 @@ public class EmployeeController {
     @GetMapping("/notifications")
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    public Page<Notification> getNewNotifications(Authentication authentication) {
-        Pageable paging = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return notificationService.getNewUserNotifications(authentication.getName(), paging);
+    public Page<Notification> getNewNotifications
+            (Authentication authentication,
+             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return notificationService.getNewUserNotifications(authentication.getName(), pageable);
     }
 
     @GetMapping("/notifications/all")
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    public Page<Notification> getNotifications(Authentication authentication) {
-        Pageable paging = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return notificationService.getUserNotifications(authentication.getName(), paging);
+    public Page<Notification> getNotifications
+            (Authentication authentication,
+             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return notificationService.getUserNotifications(authentication.getName(), pageable);
     }
 //
 //    @GetMapping("/{id}/leave-requests")

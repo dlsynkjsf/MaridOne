@@ -33,4 +33,40 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("error", ex.getMessage()));
     }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<?> handleUnauthorizedAccessException(UnauthorizedAccessException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<?> handleItemNotFoundException(ItemNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(RequestNotFoundException.class)
+    public ResponseEntity<?> handleRequestNotFoundException(RequestNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateLeaveException.class)
+    public ResponseEntity<?> handleDuplicateLeaveException(DuplicateLeaveException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateDisputeException.class)
+    public ResponseEntity<?> handleDuplicateDisputeException(DuplicateDisputeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidActionException.class)
+    public ResponseEntity<?> handleInvalidActionException(InvalidActionException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
 }
