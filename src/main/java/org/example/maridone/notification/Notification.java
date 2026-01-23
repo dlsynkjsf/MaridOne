@@ -23,7 +23,7 @@ public class Notification {
     private Instant createdAt;
 
     @Column(name = "read_status", nullable = false)
-    private boolean readStatus;
+    private Boolean readStatus;
 
     @Column(name = "importance", nullable = false)
     private String importance;
@@ -54,11 +54,11 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    public boolean isReadStatus() {
+    public Boolean isReadStatus() {
         return readStatus;
     }
 
-    public void setReadStatus(boolean readStatus) {
+    public void setReadStatus(Boolean readStatus) {
         this.readStatus = readStatus;
     }
 

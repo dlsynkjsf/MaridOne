@@ -69,4 +69,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", ex.getMessage()));
     }
+
+    @ExceptionHandler(LeaveNotFoundException.class)
+    public ResponseEntity<?> handleLeaveNotFoundException(LeaveNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<?> handleInsufficientBalanceException(InsufficientBalanceException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
 }

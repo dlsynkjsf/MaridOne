@@ -1,8 +1,11 @@
 package org.example.maridone.notification;
 
+import org.example.maridone.notification.spec.NotificationSpecs;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,11 +18,12 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    public Page<Notification> getUserNotifications(String username, Pageable pageable) {
-        return notificationRepository.findByEmployee_UserAccount_Username(username, pageable);
-    }
-
-    public Page<Notification> getNewUserNotifications(String username, Pageable pageable) {
-        return notificationRepository.findByEmployee_UserAccount_UsernameAndReadStatusFalse(username, pageable);
+    @Transactional(readOnly = true)
+    public Page<Notification> getUserNotifications(String username, Boolean status, Pageable pageable) {
+        Specification<Notification> spec = Specification.allOf(
+                NotificationSpecs.hasStatus(status),
+                NotificationSpecs.hasUsername(username)
+        );
+        return notificationRepository.findAll(spec, pageable);
     }
 }

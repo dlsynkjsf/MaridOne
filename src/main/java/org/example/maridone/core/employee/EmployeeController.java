@@ -4,17 +4,8 @@ import org.example.maridone.core.dto.EmployeeDetailsDto;
 import org.example.maridone.core.dto.EmployeeRequestDto;
 import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.user.UserAccountService;
-import org.example.maridone.notification.Notification;
-import org.example.maridone.notification.NotificationService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +20,11 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final UserAccountService userAccountService;
-    private final NotificationService notificationService;
 
     public EmployeeController(EmployeeService employeeService,
-                              UserAccountService userAccountService, NotificationService notificationService) {
+                              UserAccountService userAccountService) {
         this.employeeService = employeeService;
         this.userAccountService = userAccountService;
-        this.notificationService = notificationService;
     }
 
     /*
@@ -103,23 +92,7 @@ public class EmployeeController {
 //    }
 //
 
-    @GetMapping("/notifications")
-    @PreAuthorize("isAuthenticated()")
-    @Transactional(readOnly = true)
-    public Page<Notification> getNewNotifications
-            (Authentication authentication,
-             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return notificationService.getNewUserNotifications(authentication.getName(), pageable);
-    }
 
-    @GetMapping("/notifications/all")
-    @PreAuthorize("isAuthenticated()")
-    @Transactional(readOnly = true)
-    public Page<Notification> getNotifications
-            (Authentication authentication,
-             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return notificationService.getUserNotifications(authentication.getName(), pageable);
-    }
 //
 //    @GetMapping("/{id}/leave-requests")
 //    public List<LeaveRequest> getAllLeaveRequests(@PathVariable Long id) {

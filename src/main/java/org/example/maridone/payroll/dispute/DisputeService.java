@@ -11,11 +11,16 @@ import org.example.maridone.payroll.dto.DisputeRequestDto;
 import org.example.maridone.payroll.dto.DisputeResponseDto;
 import org.example.maridone.payroll.mapper.PayrollMapper;
 import org.example.maridone.payroll.run.PayrollItemRepository;
+import org.example.maridone.payroll.spec.DisputeSpecs;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
+
+import static org.example.maridone.payroll.spec.DisputeSpecs.hasStatus;
+
 @Service
 public class DisputeService {
     private final DisputeRequestRepository disputeRepository;
@@ -72,12 +77,14 @@ public class DisputeService {
             return entityPage.map(payrollMapper::toResponseDto);
     }
 
+
+    @Transactional(readOnly = true)
     public Page<DisputeResponseDto> getMyDisputeRequests(Long empId, Status status, Pageable pageable) {
-        Page<DisputeRequest> entityPage;
-        if (status == Status.ALL) {
-             entityPage = disputeRepository.findAllByPayrollItem_Employee_EmployeeId(empId, pageable);
-        } else
-            entityPage = disputeRepository.findAllByPayrollItem_Employee_EmployeeIdAndStatus(empId, status, pageable);
+        Specification<DisputeRequest> spec = Specification.allOf(
+                DisputeSpecs.hasStatus(status),
+                DisputeSpecs.hasEmployeeId(empId)
+                );
+        Page<DisputeRequest> entityPage = disputeRepository.findAll(spec, pageable);
         return entityPage.map(payrollMapper::toResponseDto);
     }
 }

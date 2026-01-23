@@ -1,6 +1,6 @@
 package org.example.maridone.core.user;
 
-import org.example.maridone.core.mapper.UserAccountMapper;
+import org.example.maridone.core.mapper.CoreMapper;
 import org.example.maridone.enums.Position;
 import org.example.maridone.exception.AccountNotFoundException;
 import org.example.maridone.exception.BadCredentialsException;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserAccountService {
 
     private final UserAccountRepository userAccountRepository;
-    private final UserAccountMapper userAccountMapper;
+    private final CoreMapper coreMapper;
     private final PasswordEncoder passwordEncoder;
 
     public UserAccountService
             (UserAccountRepository userAccountRepository,
-             UserAccountMapper userAccountMapper,
+             CoreMapper coreMapper,
              PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
-        this.userAccountMapper = userAccountMapper;
+        this.coreMapper = coreMapper;
         this.passwordEncoder = passwordEncoder;
     }
 

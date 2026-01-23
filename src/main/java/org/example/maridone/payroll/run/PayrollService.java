@@ -6,6 +6,8 @@ import org.example.maridone.payroll.itemcomponent.DeductionsService;
 import org.example.maridone.payroll.dto.ItemDetailsDto;
 import org.example.maridone.payroll.itemcomponent.EarningsService;
 import org.example.maridone.payroll.mapper.PayrollMapper;
+import org.example.maridone.payroll.spec.ItemSpecs;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +42,13 @@ public class PayrollService {
 
     @Transactional
     public List<ItemDetailsDto> getItems(Long empId) {
-        List<PayrollItem> items = payrollItemRepository.findByEmployee_EmployeeId(empId);
-        List<ItemDetailsDto> itemsDto = payrollMapper.toItemDetailsDtos(items);
 
-        return itemsDto;
+        Specification<PayrollItem> spec = Specification.allOf(
+                ItemSpecs.hasEmployeeId(empId)
+        );
+        List<PayrollItem> items = payrollItemRepository.findAll(spec);
+
+        return payrollMapper.toItemDetailsDtos(items);
     }
 
 
