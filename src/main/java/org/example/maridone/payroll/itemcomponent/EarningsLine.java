@@ -2,7 +2,7 @@ package org.example.maridone.payroll.itemcomponent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.example.maridone.payroll.OvertimeRequest;
+import org.example.maridone.overtime.OvertimeRequest;
 import org.example.maridone.payroll.PayrollItem;
 
 import java.math.BigDecimal;

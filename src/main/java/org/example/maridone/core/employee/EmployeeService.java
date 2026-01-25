@@ -4,7 +4,12 @@ import org.example.maridone.core.dto.EmployeeDetailsDto;
 import org.example.maridone.core.dto.EmployeeRequestDto;
 import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.mapper.CoreMapper;
+import org.example.maridone.core.spec.EmployeeFilter;
+import org.example.maridone.core.spec.EmployeeSpecs;
 import org.example.maridone.exception.EmployeeNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +33,10 @@ public class EmployeeService {
         return coreMapper.employeeToEmployeeResponse(employee);
     }
 
-    public List<EmployeeResponseDto> getAllEmployees() {
-        return coreMapper.employeesToEmployeeResponses(employeeRepository.findAll());
+    public Page<EmployeeResponseDto> getAllEmployees(EmployeeFilter employeeFilter, Pageable pageable) {
+        Specification<Employee> specs = EmployeeSpecs.hasFilters(employeeFilter);
+        Page<Employee> employeePage = employeeRepository.findAll(specs, pageable);
+        return employeePage.map(coreMapper::employeeToEmployeeResponse);
     }
 
     public EmployeeResponseDto getEmployee(Long id) {

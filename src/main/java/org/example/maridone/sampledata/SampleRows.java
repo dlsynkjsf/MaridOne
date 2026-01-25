@@ -89,7 +89,10 @@ public class SampleRows {
             }
             emp.setLastName("lastName" + (i*2));
             emp.setBirthDate(birthDate);
-            emp.setEmploymentDate(LocalDate.now());
+            emp.setEmploymentDateStart(LocalDate.now().minusDays(i*10));
+            if (i == 4) {
+                emp.setEmploymentDateEnd(LocalDate.now().minusDays(i));
+            }
             switch(i) {
                 case 1: {
                     emp.setEmploymentStatus(EmploymentStatus.REGULAR);

@@ -15,7 +15,7 @@ import org.example.maridone.leave.balance.LeaveBalance;
 import org.example.maridone.leave.request.LeaveRequest;
 import org.example.maridone.log.ActivityLog;
 import org.example.maridone.notification.Notification;
-import org.example.maridone.payroll.OvertimeRequest;
+import org.example.maridone.overtime.OvertimeRequest;
 import org.example.maridone.payroll.PayrollItem;
 
 import java.time.LocalDate;
@@ -51,8 +51,11 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
-    @Column(name = "employment_date", nullable = false)
-    private LocalDate employmentDate;
+    @Column(name = "employment_date_start", nullable = false)
+    private LocalDate employmentDateStart;
+
+    @Column(name ="employment_date_end", nullable = true)
+    private LocalDate employmentDateEnd;
 
     @NotBlank
     @Column(name = "email", nullable = false, length = 254)
@@ -140,12 +143,20 @@ public class Employee {
         this.employmentStatus = employmentStatus;
     }
 
-    public LocalDate getEmploymentDate() {
-        return employmentDate;
+    public LocalDate getEmploymentDateStart() {
+        return employmentDateStart;
     }
 
-    public void setEmploymentDate(LocalDate employmentDate) {
-        this.employmentDate = employmentDate;
+    public void setEmploymentDateStart(LocalDate employmentDate) {
+        this.employmentDateStart = employmentDate;
+    }
+
+    public LocalDate getEmploymentDateEnd() {
+        return employmentDateEnd;
+    }
+
+    public void setEmploymentDateEnd(LocalDate employmentDateEnd) {
+        this.employmentDateEnd = employmentDateEnd;
     }
 
     public String getEmail() {

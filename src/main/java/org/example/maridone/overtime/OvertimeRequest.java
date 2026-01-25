@@ -1,4 +1,4 @@
-package org.example.maridone.payroll;
+package org.example.maridone.overtime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -9,6 +9,7 @@ import org.example.maridone.payroll.itemcomponent.EarningsLine;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "overtime_request")
@@ -19,10 +20,13 @@ public class OvertimeRequest {
     @Column(name = "overtime_id", nullable = false)
     private Long overtimeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id", nullable = false)
     @JsonIgnore
     private Employee employee;
+
+    @Column(name = "emp_id", updatable = false, insertable = false)
+    private Long employeeId;
 
     @OneToOne(mappedBy = "overtimeRequest", cascade = CascadeType.ALL)
     private EarningsLine earningsLine;
@@ -37,22 +41,26 @@ public class OvertimeRequest {
     @Column(name = "work_date", nullable = false)
     private LocalDate workDate;
 
-    @Column(name = "start_time")
-    private Instant startTime;
-    @Column(name = "end_time")
-    private Instant endTime;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
 
-    @Column(name = "overtime_type")
+    @Column(name = "overtime_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EarningsType overtimeType;
 
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
 
-    @Column(name = "approver")
+    @Column(name = "approver", nullable = true)
     private String approver;
 
-    @Column(name = "approved_at")
+    @Column(name = "approved_at", nullable = true)
     private Instant approvedAt;
+
+    @Column(name = "approve_reason", nullable = true)
+    private String approveReason;
 
     public Long getOvertimeId() {
         return overtimeId;
@@ -64,6 +72,10 @@ public class OvertimeRequest {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
     public Status getRequestStatus() {
@@ -82,19 +94,19 @@ public class OvertimeRequest {
         this.workDate = workDate;
     }
 
-    public Instant getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
@@ -136,6 +148,14 @@ public class OvertimeRequest {
 
     public void setApprovedAt(Instant approvedAt) {
         this.approvedAt = approvedAt;
+    }
+
+    public String getApproveReason() {
+        return approveReason;
+    }
+
+    public void setApproveReason(String approveReason) {
+        this.approveReason = approveReason;
     }
 
     public EarningsLine getEarningsLine() {
