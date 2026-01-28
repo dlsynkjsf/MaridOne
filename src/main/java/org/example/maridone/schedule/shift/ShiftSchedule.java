@@ -1,40 +1,47 @@
-package org.example.maridone.calendar;
+package org.example.maridone.schedule.shift;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.EarningsType;
 
-import java.time.OffsetTime;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 public class ShiftSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long shift_id;
+    @Column(name = "shift_id")
+    private Long shiftId;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emp_id")
     private Employee employee;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "emp_id", insertable = false, updatable = false)
+    private Long employeeId;
 
     @Column(name = "start_time")
-    private OffsetTime startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time")
-    private OffsetTime endTime;
+    private LocalTime endTime;
 
     @Column(name = "day_of_week")
-    private int dayOfWeek;
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek dayOfWeek;
 
     @Column(name = "shift_type")
     @Enumerated(EnumType.STRING)
     private EarningsType earningsType;
 
-    public Long getShift_id() {
-        return shift_id;
+    public Long getShiftId() {
+        return shiftId;
     }
 
     public Employee getEmployee() {
@@ -45,35 +52,32 @@ public class ShiftSchedule {
         this.employee = employee;
     }
 
-    public String getTitle() {
-        return title;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public OffsetTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(OffsetTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public OffsetTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(OffsetTime endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
-    public int getDayOfWeek() {
+    public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(int dayOfWeek) {
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 

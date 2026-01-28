@@ -1,4 +1,4 @@
-package org.example.maridone.calendar;
+package org.example.maridone.schedule.calendar;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

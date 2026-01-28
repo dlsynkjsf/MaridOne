@@ -1,9 +1,9 @@
 package org.example.maridone.sampledata;
 
-import org.example.maridone.calendar.CalendarRepository;
-import org.example.maridone.calendar.CompanyCalendar;
-import org.example.maridone.calendar.ShiftRepository;
-import org.example.maridone.calendar.ShiftSchedule;
+import org.example.maridone.schedule.calendar.CalendarRepository;
+import org.example.maridone.schedule.calendar.CompanyCalendar;
+import org.example.maridone.schedule.shift.ShiftRepository;
+import org.example.maridone.schedule.shift.ShiftSchedule;
 import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.employee.EmployeeRepository;
@@ -26,10 +26,7 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.OffsetTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -306,16 +303,15 @@ public class SampleRows {
         for (int k = 1; k <= 7; k++) {
             ShiftSchedule shiftSchedule = new ShiftSchedule();
             shiftSchedule.setEmployee(emp);
-            shiftSchedule.setDayOfWeek(k);
+            shiftSchedule.setDayOfWeek(DayOfWeek.of(k));
             if (k == 1)
                 shiftSchedule.setEarningsType(EarningsType.BASIC);
             else if(k == 2)
                 shiftSchedule.setEarningsType(EarningsType.DOUBLE_OVERTIME);
             else
                 shiftSchedule.setEarningsType(EarningsType.OVERTIME);
-            shiftSchedule.setStartTime(OffsetTime.now().minusHours(k));
-            shiftSchedule.setEndTime(OffsetTime.now());
-            shiftSchedule.setTitle(DayOfWeek.of(k).toString());
+            shiftSchedule.setStartTime(LocalTime.now());
+            shiftSchedule.setEndTime(LocalTime.now().plusHours(8));
             shiftSchedules.add(shiftSchedule);
         }
         return shiftSchedules;

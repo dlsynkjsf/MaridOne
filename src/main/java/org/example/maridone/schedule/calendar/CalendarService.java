@@ -1,5 +1,6 @@
-package org.example.maridone.calendar;
+package org.example.maridone.schedule.calendar;
 
+import org.example.maridone.schedule.shift.ShiftRepository;
 import org.springframework.stereotype.Service;
 
 @Service

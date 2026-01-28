@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
-import org.example.maridone.calendar.ShiftSchedule;
+import org.example.maridone.schedule.shift.ShiftSchedule;
 import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.core.user.UserAccount;
 import org.example.maridone.enums.EmploymentStatus;

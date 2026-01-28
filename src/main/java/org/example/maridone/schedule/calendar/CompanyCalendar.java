@@ -1,4 +1,4 @@
-package org.example.maridone.calendar;
+package org.example.maridone.schedule.calendar;
 
 import jakarta.persistence.*;
 
