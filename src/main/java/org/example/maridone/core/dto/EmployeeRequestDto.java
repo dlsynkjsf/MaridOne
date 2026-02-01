@@ -1,8 +1,10 @@
 package org.example.maridone.core.dto;
 
+import jakarta.validation.constraints.NotNull;
 import org.example.maridone.embeddable.Address;
 import org.example.maridone.enums.EmploymentStatus;
 import org.example.maridone.enums.Position;
+import org.example.maridone.marker.HrUpdate;
 
 import java.time.LocalDate;
 
@@ -12,6 +14,7 @@ public class EmployeeRequestDto {
     private String middleName;
     private String lastName;
     private LocalDate birthDate;
+    @NotNull(groups = HrUpdate.class)
     private EmploymentStatus employmentStatus;
     private String email;
     private String phoneNumber;

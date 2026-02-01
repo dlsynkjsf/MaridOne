@@ -2,14 +2,21 @@ package org.example.maridone.leave;
 
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.employee.EmployeeRepository;
-import org.example.maridone.exception.DuplicateLeaveException;
-import org.example.maridone.exception.EmployeeNotFoundException;
-import org.example.maridone.exception.InsufficientBalanceException;
-import org.example.maridone.exception.LeaveNotFoundException;
+import org.example.maridone.core.user.UserAccount;
+import org.example.maridone.core.user.UserAccountRepository;
+import org.example.maridone.enums.Status;
+import org.example.maridone.exception.*;
 import org.example.maridone.leave.balance.*;
+import org.example.maridone.leave.dto.BalanceRequestDto;
+import org.example.maridone.leave.dto.BalanceResponseDto;
+import org.example.maridone.leave.dto.LeaveRequestDto;
+import org.example.maridone.leave.dto.UpdateBalanceDto;
+import org.example.maridone.leave.request.LeaveRequest;
 import org.example.maridone.leave.request.LeaveRequestRepository;
 import org.example.maridone.leave.spec.LeaveSpecs;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,21 +29,24 @@ public class LeaveService {
     private final LeaveBalanceRepository leaveBalanceRepository;
     private final LeaveRequestRepository leaveRequestRepository;
     private final EmployeeRepository employeeRepository;
+    private final UserAccountRepository userAccountRepository;
     private final LeaveMapper leaveMapper;
 
     public LeaveService(
             LeaveBalanceRepository leaveBalanceRepository,
             LeaveRequestRepository leaveRequestRepository,
             EmployeeRepository employeeRepository,
+            UserAccountRepository userAccountRepository,
             LeaveMapper leaveMapper) {
         this.leaveBalanceRepository = leaveBalanceRepository;
         this.leaveRequestRepository = leaveRequestRepository;
         this.employeeRepository = employeeRepository;
+        this.userAccountRepository = userAccountRepository;
         this.leaveMapper = leaveMapper;
     }
 
     @Transactional
-    public LeaveBalance createLeave(Long empId, BalanceRequestDto payload) {
+    public LeaveBalance createLeaveBalance(Long empId, BalanceRequestDto payload) {
         Specification<LeaveBalance> spec = Specification.allOf(
                 LeaveSpecs.hasEmployeeId(empId),
                 LeaveSpecs.hasLeaveType(payload.getLeaveType())
@@ -64,7 +74,7 @@ public class LeaveService {
         );
         LeaveBalance lb = leaveBalanceRepository.findOne(spec).orElseThrow(() -> new LeaveNotFoundException
                 (
-                "Employee Id: " + empId + " has no Leave of type: " + payload.getLeaveType()
+                "Employee Id: " + empId + " has no Leave Balance of type: " + payload.getLeaveType()
                         + " Please create a leave type " + payload.getLeaveType() + " for Employee " + empId
                 )
         );
@@ -81,5 +91,32 @@ public class LeaveService {
             lb.setBalanceHours(lb.getBalanceHours().subtract(payload.getBalanceHours()));
         }
         leaveBalanceRepository.save(lb);
+    }
+
+    @Transactional
+    public LeaveRequest createLeaveRequest(LeaveRequestDto payload, Long empId) {
+        Employee emp =  employeeRepository.findById(empId).orElseThrow(() -> new EmployeeNotFoundException(empId));
+        LeaveRequest request = new LeaveRequest();
+        request.setRequestStatus(Status.PENDING);
+        request.setEmployee(emp);
+        request.setStartDate(payload.getStartDate());
+        request.setEndDate(payload.getEndDate());
+        request.setReason(payload.getReason());
+        leaveRequestRepository.save(request);
+        return request;
+    }
+
+    @Transactional
+    public LeaveRequest updateLeaveRequest(LeaveRequest payload, Long requestId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAccount user = userAccountRepository.findByUsername(authentication.getName()).orElseThrow(
+                () -> new AccountNotFoundException(authentication.getName()));
+
+        LeaveRequest request = leaveRequestRepository.findById(requestId).orElseThrow(
+                () -> new LeaveNotFoundException("Leave Request of Id: " + requestId + " is not found."));
+        request.setApproverReason(payload.getApproverReason());
+        request.setApprover(user.getEmployee().getLastName() + ", " + user.getEmployee().getFirstName());
+        leaveRequestRepository.save(request);
+        return request;
     }
 }

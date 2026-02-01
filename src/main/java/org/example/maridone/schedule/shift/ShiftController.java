@@ -1,6 +1,5 @@
 package org.example.maridone.schedule.shift;
 
-import jakarta.validation.Valid;
 import org.example.maridone.marker.OnCreate;
 import org.example.maridone.marker.OnUpdate;
 import org.example.maridone.schedule.dto.ShiftRequestDto;
@@ -8,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -29,7 +30,11 @@ public class ShiftController {
     public ResponseEntity<ShiftSchedule> addShiftSchedule(
             @RequestBody @Validated(OnCreate.class) ShiftRequestDto payload) {
         ShiftSchedule schedule = shiftService.addShiftSchedule(payload);
-        return ResponseEntity.ok(schedule);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .build()
+                .toUri();
+        return ResponseEntity.created(location).body(schedule);
     }
 
     //update shift

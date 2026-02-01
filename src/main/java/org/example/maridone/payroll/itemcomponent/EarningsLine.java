@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class EarningsLine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "earnings_id", nullable = false)
     private Long earningsId;
 

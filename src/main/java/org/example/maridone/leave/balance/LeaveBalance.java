@@ -14,7 +14,7 @@ public class LeaveBalance {
 
     @Id
     @Column(name = "leave_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long leaveId;
 
     @ManyToOne

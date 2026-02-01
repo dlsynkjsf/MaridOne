@@ -1,10 +1,11 @@
 package org.example.maridone.schedule.calendar;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CalendarRepository extends JpaRepository<CompanyCalendar,Long> {
+public interface CalendarRepository extends JpaRepository<CompanyCalendar,Long>, JpaSpecificationExecutor<CompanyCalendar> {
 
 }

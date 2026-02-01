@@ -14,7 +14,7 @@ import java.util.List;
 public class ShiftSchedule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shift_id")
     private Long shiftId;
 

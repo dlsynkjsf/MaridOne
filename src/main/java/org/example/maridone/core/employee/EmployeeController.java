@@ -5,12 +5,14 @@ import org.example.maridone.core.dto.EmployeeRequestDto;
 import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.spec.EmployeeFilter;
 import org.example.maridone.core.user.UserAccountService;
+import org.example.maridone.marker.HrUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/employees")
+@RequestMapping("/api/employees")
 
 public class EmployeeController {
 
@@ -32,15 +34,9 @@ public class EmployeeController {
         this.userAccountService = userAccountService;
     }
 
-    /*
-        FOR MANAGEMENT
-        MANAGEMENT ROLE REQUIRED
-     */
-    // ENDPOINT: api/employees/create
+    // ENDPOINT: /api/employees/create
     @PostMapping("/create")
-    @PreAuthorize("hasRole(MANAGEMENT)")
-    //update to: status 201: created
-    //update to: responseentity
+    @PreAuthorize("hasRole('MANAGEMENT')")
     public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeRequestDto employeeRequestDto) {
         EmployeeResponseDto response = employeeService.createEmployee(employeeRequestDto);
         URI location = ServletUriComponentsBuilder
@@ -51,7 +47,7 @@ public class EmployeeController {
         return ResponseEntity.created(location).body(response);
     }
 
-    // ENDPOINT: api/employees
+    // ENDPOINT: /api/employees
     @PreAuthorize("hasRole('MANAGEMENT')")
     @GetMapping()
     public Page<EmployeeResponseDto> getAllEmployees(
@@ -60,15 +56,15 @@ public class EmployeeController {
         return employeeService.getAllEmployees(employeeFilter,pageable);
     }
 
-    // ENDPOINT: api/employees/self/id
+    // ENDPOINT: /api/employees/id
     // for personal details check only
-    @GetMapping("/self/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("@userCheck.isSelf(#id, authentication.getName())")
     public EmployeeDetailsDto getSelfEmployee(@PathVariable Long id) {
         return employeeService.getSelfEmployee(id);
     }
 
-    // ENDPOINT: api/employees/id
+    // ENDPOINT: /api/employees/id
     // id is dynamic
     //returns a status code instead of automatically showing it in the HRIS
     @PatchMapping("/{id}")
@@ -77,54 +73,12 @@ public class EmployeeController {
         return ResponseEntity.ok(response);
     }
 
-    // ENDPOINT: api/employees/status/id
+    // ENDPOINT: /api/employees/status/id
     // id is dynamic
     @PatchMapping("/status/{id}")
-    public EmployeeResponseDto updateStatus(@PathVariable Long id, @RequestBody EmployeeRequestDto employeeRequestDto) {
+    @PreAuthorize("hasRole('HR')")
+    public EmployeeResponseDto updateStatus(@PathVariable Long id,
+                                            @Validated(HrUpdate.class) @RequestBody EmployeeRequestDto employeeRequestDto) {
         return employeeService.updateStatus(id, employeeRequestDto);
     }
-
-    /*
-        FOR EMPLOYEE ROLE
-        make sure only the specific employee can access their id
-     */
-
-//    @GetMapping("/{id}/bank-accounts")
-//    public BankAccountDto getBankAccounts(@PathVariable Long id) {
-//
-//    }
-//
-//    @PostMapping("/{id}/bank-accounts")
-//    public BankAccountDto createBankAccount(@PathVariable Long id, BankAccountDto bankDetails) {
-//
-//    }
-//
-
-
-//
-//    @GetMapping("/{id}/leave-requests")
-//    public List<LeaveRequest> getAllLeaveRequests(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("{id}/leave-balance")
-//    public BigDecimal getLeaveBalance(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("/{id}/payroll-items")
-//    public List<PayrollItem> getAllPayrollItems(@PathVariable Long id) {
-//
-//    }
-//
-//    @GetMapping("/{id}/user-account")
-//    public UserAccountDto getUserAccount(@PathVariable Long id) {
-//
-//    }
-//
-//    @PatchMapping("/{id}/update/address")
-//    public EmployeeResponse updateAddress(@PathVariable Long id, Address address) {
-//
-//    }
-
 }

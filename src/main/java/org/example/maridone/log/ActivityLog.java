@@ -12,30 +12,29 @@ public class ActivityLog {
     @Column(name = "activity_id")
     private Long activityId;
 
-    @ManyToOne
-    @JoinColumn(name = "emp_id")
-    Employee employee;
+    @Column(name = "emp_id")
+    private Long employeeId;
 
-    @Column(name = "activity_type")
+    @Column(name = "activity_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private Activity activityType;
 
-    @Column(name = "message")
+    @Column(name = "message", nullable = false)
     private String message;
 
-    @Column(name = "timestamp")
+    @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
     public Long getActivityId() {
         return activityId;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getMessage() {

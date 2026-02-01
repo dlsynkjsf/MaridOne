@@ -14,7 +14,7 @@ import java.time.Instant;
 public class DisputeRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dispute_id", nullable = false)
     private Long disputeId;
 

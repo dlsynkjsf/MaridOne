@@ -1,6 +1,5 @@
-package org.example.maridone.core.user;
+package org.example.maridone.core.dto;
 
-import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.AccountStatus;
 import org.example.maridone.enums.Position;
 

@@ -6,13 +6,16 @@ import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.mapper.CoreMapper;
 import org.example.maridone.core.spec.EmployeeFilter;
 import org.example.maridone.core.spec.EmployeeSpecs;
+import org.example.maridone.embeddable.Address;
 import org.example.maridone.exception.EmployeeNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -26,6 +29,7 @@ public class EmployeeService {
     }
 
 
+    @Transactional
     public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
         //security
         Employee employee = coreMapper.employeeRequestToEmployee(employeeRequestDto);
@@ -50,28 +54,39 @@ public class EmployeeService {
         return coreMapper.employeeToEmployeeDetailsDto(emp);
     }
 
+    @Transactional
     public EmployeeResponseDto updateEmployee(Long id, EmployeeRequestDto updated) {
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-        //security
+        Optional.ofNullable(updated.getFirstName()).ifPresent(emp::setFirstName);
+        Optional.ofNullable(updated.getMiddleName()).ifPresent(emp::setMiddleName);
+        Optional.ofNullable(updated.getLastName()).ifPresent(emp::setLastName);
+        Optional.ofNullable(updated.getBirthDate()).ifPresent(emp::setBirthDate);
+        Optional.ofNullable(updated.getEmail()).ifPresent(emp::setEmail);
+        Optional.ofNullable(updated.getPhoneNumber()).ifPresent(emp::setPhoneNumber);
+        Optional.ofNullable(updated.getAddress()).ifPresent(
+                newAddr -> {
+                    Address existing = Optional.ofNullable(emp.getAddress()).orElseGet(() -> {
+                        Address a = new Address();
+                        emp.setAddress(a);
+                        return a;
+            });
 
-        emp.setFirstName(updated.getFirstName());
-        emp.setMiddleName(updated.getMiddleName());
-        emp.setLastName(updated.getLastName());
-        emp.setBirthDate(updated.getBirthDate());
-        emp.setEmploymentStatus(updated.getEmploymentStatus());
-        emp.setEmail(updated.getEmail());
-        emp.setPhoneNumber(updated.getPhoneNumber());
-        emp.setPosition(updated.getPosition());
-        emp.setAddress(updated.getAddress());
+            Optional.ofNullable(newAddr.getPermanentAddress()).ifPresent(existing::setPermanentAddress);
+            Optional.ofNullable(newAddr.getTemporaryAddress()).ifPresent(existing::setTemporaryAddress);
+            Optional.ofNullable(newAddr.getCity()).ifPresent(existing::setCity);
+            Optional.ofNullable(newAddr.getState()).ifPresent(existing::setState);
+            Optional.ofNullable(newAddr.getCountry()).ifPresent(existing::setCountry);
+            Optional.ofNullable(newAddr.getZipCode()).ifPresent(existing::setZipCode);
+        });
 
         employeeRepository.save(emp);
 
         return coreMapper.employeeToEmployeeResponse(emp);
     }
 
+    @Transactional
     public EmployeeResponseDto updateStatus(Long id, EmployeeRequestDto updated) {
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-        //security
 
         emp.setEmploymentStatus(updated.getEmploymentStatus());
         employeeRepository.save(emp);

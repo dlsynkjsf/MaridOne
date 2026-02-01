@@ -8,18 +8,21 @@ import java.time.Instant;
 public class CompanyCalendar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "calendar_id", nullable = false)
     private Long calendarId;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private Instant startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private Instant endDate;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 
     public Long getCalendarId() {
         return calendarId;
@@ -47,5 +50,13 @@ public class CompanyCalendar {
 
     public void setEndDate(Instant end) {
         this.endDate = end;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

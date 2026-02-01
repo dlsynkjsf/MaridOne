@@ -1,22 +1,24 @@
 package org.example.maridone.leave;
 
 import jakarta.validation.Valid;
-import org.example.maridone.enums.LeaveType;
-import org.example.maridone.leave.balance.BalanceRequestDto;
-import org.example.maridone.leave.balance.BalanceResponseDto;
+import org.example.maridone.leave.dto.BalanceRequestDto;
+import org.example.maridone.leave.dto.BalanceResponseDto;
 import org.example.maridone.leave.balance.LeaveBalance;
-import org.example.maridone.leave.balance.UpdateBalanceDto;
+import org.example.maridone.leave.dto.LeaveRequestDto;
+import org.example.maridone.leave.dto.UpdateBalanceDto;
+import org.example.maridone.leave.request.LeaveRequest;
+import org.example.maridone.marker.OnUpdate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employee/leave")
+@RequestMapping("/api/leave")
 public class LeaveController {
 
     private final LeaveService leaveService;
@@ -43,7 +45,7 @@ public class LeaveController {
     public ResponseEntity<LeaveBalance> createLeave(
             @PathVariable Long empId,
             @RequestBody @Valid BalanceRequestDto payload){
-        LeaveBalance response = leaveService.createLeave(empId,payload);
+        LeaveBalance response = leaveService.createLeaveBalance(empId,payload);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .build()
@@ -69,5 +71,21 @@ public class LeaveController {
 
 
     //create leave request
-    //update leave request that only hr can use to update the request
+    @PostMapping("/create")
+    public ResponseEntity<LeaveRequest> createLeaveRequest(@RequestBody LeaveRequestDto payload, Long empId) {
+        LeaveRequest request = leaveService.createLeaveRequest(payload, empId);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{requestId}")
+                .buildAndExpand(request.getRequestId())
+                .toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    @PatchMapping("update/{requestId}")
+    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity<LeaveRequest> updateLeaveRequest(@Validated(OnUpdate.class) @RequestBody LeaveRequest payload, Long requestId) {
+        LeaveRequest request = leaveService.updateLeaveRequest(payload, requestId);
+        return ResponseEntity.ok(request);
+    }
 }

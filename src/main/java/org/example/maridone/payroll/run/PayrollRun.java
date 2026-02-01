@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class PayrollRun {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pay_id", nullable = false)
     private Long payId;
 

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class DeductionsLine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deductions_id", nullable = false)
     private Long deductionsId;
 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.example.maridone.log.AttendanceLog;
 import org.example.maridone.schedule.shift.ShiftSchedule;
 import org.example.maridone.core.bank.BankAccount;
 import org.example.maridone.core.user.UserAccount;
@@ -25,7 +26,7 @@ import java.util.List;
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "emp_id", unique = true, nullable = false)
     private Long employeeId;
 
@@ -88,16 +89,17 @@ public class Employee {
     private List<OvertimeRequest> overtimeRequests;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ActivityLog> activityLogs;
-
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ShiftSchedule> shifts;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<LeaveBalance> leaveBalance;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private  List<AttendanceLog> attendanceLogs;
+
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private UserAccount userAccount;
+
 
     public Long getEmployeeId() {
         return employeeId;
@@ -231,6 +233,14 @@ public class Employee {
         this.leaveBalance = leaveBalance;
     }
 
+    public List<AttendanceLog> getAttendanceLogs() {
+        return attendanceLogs;
+    }
+
+    public void setAttendanceLogs(List<AttendanceLog> attendanceLogs) {
+        this.attendanceLogs = attendanceLogs;
+    }
+
     public UserAccount getUserAccount() {
         return userAccount;
     }
@@ -247,13 +257,6 @@ public class Employee {
         this.overtimeRequests = overtimeRequests;
     }
 
-    public List<ActivityLog> getActivityLogs() {
-        return activityLogs;
-    }
-
-    public void setActivityLogs(List<ActivityLog> activityLogs) {
-        this.activityLogs = activityLogs;
-    }
 
     public List<ShiftSchedule> getShifts() {
         return shifts;

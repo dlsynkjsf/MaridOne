@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "payroll_item")
 public class PayrollItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id", nullable = false)
     private Long itemId;
 

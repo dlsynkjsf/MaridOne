@@ -17,7 +17,9 @@ public class GlobalExceptionHandler {
             ItemNotFoundException.class,
             RequestNotFoundException.class,
             LeaveNotFoundException.class,
-            ShiftsNotFoundException.class
+            ShiftsNotFoundException.class,
+            BankNotFoundException.class,
+            CalendarEventNotFound.class
     })
     public ResponseEntity<Map<String, String>> handleNotFoundExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -42,6 +44,7 @@ public class GlobalExceptionHandler {
             InvalidActionException.class,
             InsufficientBalanceException.class,
             OvertimeException.class,
+            BankInactiveException.class
     })
     public ResponseEntity<Map<String, String>> handleBadRequestExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

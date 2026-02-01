@@ -7,15 +7,13 @@ import org.example.maridone.enums.EarningsType;
 import org.example.maridone.exception.EmployeeNotFoundException;
 import org.example.maridone.exception.ShiftsNotFoundException;
 import org.example.maridone.schedule.dto.ShiftRequestDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.DayOfWeek;
-import java.time.Instant;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShiftService {
@@ -35,16 +33,15 @@ public class ShiftService {
     @Transactional
     public void createShifts(Long empId) {
         Employee emp = employeeRepository.findById(empId).orElseThrow(() -> new EmployeeNotFoundException(empId));
-        List<ShiftSchedule> schedules = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        List<ShiftSchedule> schedules = Arrays.stream(DayOfWeek.values()).map(day -> {
             ShiftSchedule shiftSchedule = new ShiftSchedule();
             shiftSchedule.setEmployee(emp);
-            shiftSchedule.setStartTime(LocalTime.now());
-            shiftSchedule.setEndTime(LocalTime.now());
-            shiftSchedule.setDayOfWeek(DayOfWeek.of(i+1));
+            shiftSchedule.setStartTime(LocalTime.of(9,0));
+            shiftSchedule.setEndTime(LocalTime.of(17,0));
+            shiftSchedule.setDayOfWeek(day);
             shiftSchedule.setEarningsType(EarningsType.BASIC);
-            schedules.add(shiftSchedule);
-        }
+            return shiftSchedule;
+        }).collect(Collectors.toList());
         shiftRepository.saveAll(schedules);
     }
 

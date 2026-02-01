@@ -29,6 +29,10 @@ public class UserAccount {
     @JsonIgnore
     private Employee employee;
 
+    @Column(name = "emp_id", insertable = false, updatable = false)
+    private Long employeeId;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "username", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DocumentPath> documentPaths;
 
@@ -62,6 +66,10 @@ public class UserAccount {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
     public List<DocumentPath> getDocumentPaths() {

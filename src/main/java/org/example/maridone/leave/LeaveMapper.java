@@ -1,12 +1,11 @@
 package org.example.maridone.leave;
 
 import org.example.maridone.core.employee.Employee;
-import org.example.maridone.leave.balance.BalanceRequestDto;
-import org.example.maridone.leave.balance.BalanceResponseDto;
+import org.example.maridone.leave.dto.BalanceRequestDto;
+import org.example.maridone.leave.dto.BalanceResponseDto;
 import org.example.maridone.leave.balance.LeaveBalance;
 import java.util.List;
 
-import org.example.maridone.leave.balance.UpdateBalanceDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

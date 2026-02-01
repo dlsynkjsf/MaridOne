@@ -7,7 +7,7 @@ import org.example.maridone.core.dto.EmployeeRequestDto;
 import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.user.UserAccount;
-import org.example.maridone.core.user.UserAccountDto;
+import org.example.maridone.core.dto.UserAccountDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -34,5 +34,7 @@ public interface CoreMapper {
     UserAccountDto userAccounttoUserAccountDto(UserAccount userAccount);
 
     UserAccount userAccountDtoToUserAccount(UserAccountDto userAccountDto);
+
+    List<BankAccountDto> bankAccountsToBankAccountDtos(List<BankAccount> bankAccounts);
 
 }

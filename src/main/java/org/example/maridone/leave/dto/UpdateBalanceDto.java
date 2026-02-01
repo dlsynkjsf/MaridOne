@@ -1,35 +1,21 @@
-package org.example.maridone.leave.balance;
+package org.example.maridone.leave.dto;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 import org.example.maridone.enums.LeaveType;
 
 import java.math.BigDecimal;
 
-public class BalanceRequestDto {
-    @NotNull
-    @NotEmpty
-    @PositiveOrZero
-    private Long empId;
+public class UpdateBalanceDto {
 
     @NotNull
-    @NotEmpty
-    @PositiveOrZero
+    @Positive(message = "enter positive balance hours")
     private BigDecimal balanceHours;
-
-    @Enumerated(EnumType.STRING)
+    @NotNull
     private LeaveType leaveType;
-
-    public Long getEmpId() {
-        return empId;
-    }
-
-    public void setEmpId(Long empId) {
-        this.empId = empId;
-    }
+    @NotBlank(message = "type must be add/subtract")
+    private String type;
 
     public BigDecimal getBalanceHours() {
         return balanceHours;
@@ -45,5 +31,13 @@ public class BalanceRequestDto {
 
     public void setLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

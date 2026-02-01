@@ -181,8 +181,20 @@ public class SampleRows {
         bankAccount.setEmployee(emp);
         bankAccount2.setEmployee(emp);
 
+        if (i%3 == 0) {
+            bankAccount.setActive(Boolean.FALSE);
+        } else
+            bankAccount.setActive(Boolean.TRUE);
+        if (i % 6 == 0) {
+            bankAccount2.setActive(Boolean.FALSE);
+        } else
+            bankAccount2.setActive(Boolean.TRUE);
+
+
         bankAccounts.add(bankAccount);
         bankAccounts.add(bankAccount2);
+
+
 
         return bankAccounts;
     }
@@ -213,9 +225,6 @@ public class SampleRows {
 
         leaveRequest.setStartDate(LocalDate.now().plusDays(i));
         leaveRequest.setEndDate(LocalDate.now().plusDays(i + 2));
-
-        leaveRequest.setApprover("Manager " + i);
-
 
         leaveRequest.setRequestStatus((i % 2 == 0 ? Status.APPROVED : Status.PENDING));
 
@@ -285,14 +294,18 @@ public class SampleRows {
     }
 
     public static CompanyCalendar calendarEvents(CompanyCalendar calendar, int i) {
+        calendar.setActive(true);
+
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+
         if (i == 1) {
-            calendar.setStartDate(Instant.now().minus(7, ChronoUnit.DAYS));
-            calendar.setEndDate(Instant.now().minus(5, ChronoUnit.DAYS));
+            calendar.setStartDate(now.minusMonths(1).toInstant());
+            calendar.setEndDate(now.minusMonths(1).plusDays(2).toInstant());
             calendar.setTitle("Teambuilding");
         } else {
-            calendar.setStartDate(Instant.now().minus(4, ChronoUnit.DAYS));
-            calendar.setEndDate(Instant.now().minus(2, ChronoUnit.DAYS));
-            calendar.setTitle("Another event");
+            calendar.setStartDate(now.minusMonths(i).toInstant());
+            calendar.setEndDate(now.minusMonths(i).plusDays(3).toInstant());
+            calendar.setTitle("Another event: " + i);
         }
 
         return calendar;

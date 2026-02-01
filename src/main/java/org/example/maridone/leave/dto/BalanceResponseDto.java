@@ -1,4 +1,4 @@
-package org.example.maridone.leave.balance;
+package org.example.maridone.leave.dto;
 
 import org.example.maridone.enums.LeaveType;
 
