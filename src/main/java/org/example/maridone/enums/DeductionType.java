@@ -28,10 +28,10 @@ public enum DeductionType {
     /** ₱102,500 + 25% of excess over ₱800,000: Annual income ₱800k - ₱2M */
     BRACKET_LEVEL_FOUR,
     
-    /** ₱402,500 + 30% of excess over ₱2M: Annual income ₱2M - ₱8M (Missing in Clyde's) */
+    /** ₱402,500 + 30% of excess over ₱2M: Annual income ₱2M - ₱8M */
     BRACKET_LEVEL_FIVE,
     
-    /** ₱2,202,500 + 35% of excess over ₱8M: Annual income > ₱8M (Missing in Clyde's) */
+    /** ₱2,202,500 + 35% of excess over ₱8M: Annual income > ₱8M */
     BRACKET_LEVEL_SIX,
 
     // --- Loans & Advances ---
