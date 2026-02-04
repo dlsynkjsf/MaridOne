@@ -1,42 +1,60 @@
-package org.example.maridone.enums;
+package com.maridone.payroll.enums;
 
 /**
- * Defines the types of deductions applicable to MaridOne employee payroll.
- * Includes mandatory government contributions, tax brackets, and voluntary deductions.
+ * DeductionType defines the different categories of salary deductions
+ * based on Philippine Labor Laws and 2026 BIR Tax Tables.
  */
 public enum DeductionType {
-    /** Home Development Mutual Fund (HDMF) - Fixed at 2% for employees (₱10k cap). */
+    // --- Statutory Government Contributions ---
+    /** Home Development Mutual Fund (HDMF) - Fixed at ₱200 for salaries >₱10k */
     PAGIBIG,
-
-    /** Social Security System - 2026 rate is 5% for employees up to ₱35k MSC. */
+    
+    /** Social Security System - 15% total rate (5% EE Share) */
     SSS,
-
-    /** Philippine Health Insurance - 2026 rate is 5% (split 50/50 between ER and EE). */
+    
+    /** Philippine Health Insurance Corporation - 5% total rate (2.5% EE Share) */
     PHILHEALTH,
 
-    /** Income Tax: 0% for annual income below ₱250,000. */
+    // --- Withholding Tax Brackets (TRAIN Law 2026) ---
+    /** 0% Tax: Annual income ₱250,000 and below */
     BRACKET_LEVEL_ONE,
-
-    /** Income Tax: 15% of excess over ₱250,000. */
+    
+    /** 15% of excess over ₱250,000: Annual income ₱250k - ₱400k */
     BRACKET_LEVEL_TWO,
-
-    /** Income Tax: ₱22,500 + 20% of excess over ₱400,000. */
+    
+    /** ₱22,500 + 20% of excess over ₱400,000: Annual income ₱400k - ₱800k */
     BRACKET_LEVEL_THREE,
-
-    /** Income Tax: ₱102,500 + 25% of excess over ₱800,000. */
+    
+    /** ₱102,500 + 25% of excess over ₱800,000: Annual income ₱800k - ₱2M */
     BRACKET_LEVEL_FOUR,
+    
+    /** ₱402,500 + 30% of excess over ₱2M: Annual income ₱2M - ₱8M (Missing in Clyde's) */
+    BRACKET_LEVEL_FIVE,
+    
+    /** ₱2,202,500 + 35% of excess over ₱8M: Annual income > ₱8M (Missing in Clyde's) */
+    BRACKET_LEVEL_SIX,
 
-    // --- Added Missing Deduction Types ---
-
-    /** Repayment for SSS Salary or Calamity Loans. */
+    // --- Loans & Advances ---
+    /** Repayment for SSS Salary or Calamity Loans */
     SSS_LOAN,
-
-    /** Repayment for Pag-IBIG Multi-Purpose or Housing Loans. */
+    
+    /** Repayment for Pag-IBIG Short-term or Housing Loans */
     PAGIBIG_LOAN,
+    
+    /** Company-initiated cash advances or "Vale" */
+    CASH_ADVANCE,
 
-    /** Private Health Insurance/HMO premiums beyond PhilHealth coverage. */
-    HMO_PREMIUM,
+    // --- Attendance & Performance ---
+    /** Deductions due to late arrivals or tardiness */
+    LATE_PENALTY,
+    
+    /** Deductions for Unpaid Leaves or absences without pay */
+    ABSENT_DEDUCTION,
 
-    /** Any other company-specific or miscellaneous deductions. */
-    OTHER
+    // --- Others ---
+    /** Deductions for damage or loss of company-issued equipment (as per Handbook) */
+    EQUIPMENT_LOSS_PENALTY,
+    
+    /** Premium for voluntary Health Maintenance Organization upgrades */
+    HMO_UPGRADE
 }
