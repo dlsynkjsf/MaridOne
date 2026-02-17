@@ -4,7 +4,7 @@ import org.example.maridone.core.dto.EmployeeDetailsDto;
 import org.example.maridone.core.dto.EmployeeRequestDto;
 import org.example.maridone.core.dto.EmployeeResponseDto;
 import org.example.maridone.core.mapper.CoreMapper;
-import org.example.maridone.core.spec.EmployeeFilter;
+import org.example.maridone.core.filter.EmployeeFilter;
 import org.example.maridone.core.spec.EmployeeSpecs;
 import org.example.maridone.embeddable.Address;
 import org.example.maridone.exception.EmployeeNotFoundException;
@@ -14,7 +14,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,26 +31,26 @@ public class EmployeeService {
     @Transactional
     public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
         //security
-        Employee employee = coreMapper.employeeRequestToEmployee(employeeRequestDto);
+        Employee employee = coreMapper.toEmployee(employeeRequestDto);
         employeeRepository.save(employee);
-        return coreMapper.employeeToEmployeeResponse(employee);
+        return coreMapper.toEmployeeResponse(employee);
     }
 
     public Page<EmployeeResponseDto> getAllEmployees(EmployeeFilter employeeFilter, Pageable pageable) {
         Specification<Employee> specs = EmployeeSpecs.hasFilters(employeeFilter);
         Page<Employee> employeePage = employeeRepository.findAll(specs, pageable);
-        return employeePage.map(coreMapper::employeeToEmployeeResponse);
+        return employeePage.map(coreMapper::toEmployeeResponse);
     }
 
     public EmployeeResponseDto getEmployee(Long id) {
 
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-        return coreMapper.employeeToEmployeeResponse(emp);
+        return coreMapper.toEmployeeResponse(emp);
     }
 
     public EmployeeDetailsDto getSelfEmployee(Long id) {
         Employee emp = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-        return coreMapper.employeeToEmployeeDetailsDto(emp);
+        return coreMapper.toEmployeeDetailsDto(emp);
     }
 
     @Transactional
@@ -81,7 +80,7 @@ public class EmployeeService {
 
         employeeRepository.save(emp);
 
-        return coreMapper.employeeToEmployeeResponse(emp);
+        return coreMapper.toEmployeeResponse(emp);
     }
 
     @Transactional
@@ -90,7 +89,7 @@ public class EmployeeService {
 
         emp.setEmploymentStatus(updated.getEmploymentStatus());
         employeeRepository.save(emp);
-        return coreMapper.employeeToEmployeeResponse(emp);
+        return coreMapper.toEmployeeResponse(emp);
     }
 
 }

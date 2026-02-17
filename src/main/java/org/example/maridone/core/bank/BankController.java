@@ -1,6 +1,5 @@
 package org.example.maridone.core.bank;
 
-import jakarta.validation.Valid;
 import org.example.maridone.core.dto.BankAccountDto;
 import org.example.maridone.core.mapper.CoreMapper;
 import org.example.maridone.marker.OnCreate;
@@ -52,6 +51,6 @@ public class BankController {
     @GetMapping("{empId}")
     @PreAuthorize("@userCheck.isSelf(#empId, authentication.getName())")
     public List<BankAccountDto> getBankAccounts(@PathVariable Long empId) {
-        return coreMapper.bankAccountsToBankAccountDtos(bankService.getBankAccounts(empId));
+        return coreMapper.toBankAccountDtos(bankService.getBankAccounts(empId));
     }
 }
