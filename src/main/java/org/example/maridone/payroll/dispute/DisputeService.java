@@ -6,7 +6,7 @@ import org.example.maridone.exception.DuplicateDisputeException;
 import org.example.maridone.exception.InvalidActionException;
 import org.example.maridone.exception.ItemNotFoundException;
 import org.example.maridone.exception.RequestNotFoundException;
-import org.example.maridone.payroll.PayrollItem;
+import org.example.maridone.payroll.item.PayrollItem;
 import org.example.maridone.payroll.dto.DisputeActionDto;
 import org.example.maridone.payroll.dto.DisputeRequestDto;
 import org.example.maridone.payroll.dto.DisputeResponseDto;
@@ -42,8 +42,8 @@ public class DisputeService {
             throw new ItemNotFoundException(itemId);
         }
 
-        DisputeRequest check = disputeRepository.findByPayrollItem_ItemId(itemId);
-        if (check != null && check.getStatus().equals(Status.PENDING)) {
+        DisputeRequest checkRecent = disputeRepository.findTopByPayrollItem_ItemIdOrderByDisputeIdDesc(itemId);
+        if (checkRecent != null && checkRecent.getStatus().equals(Status.PENDING)) {
             throw new DuplicateDisputeException(itemId, "Your dispute is still pending. Please for an update from the HR.");
         }
 

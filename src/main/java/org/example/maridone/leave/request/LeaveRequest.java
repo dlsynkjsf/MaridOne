@@ -6,6 +6,7 @@ import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.Status;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "leave_request")
@@ -20,11 +21,14 @@ public class LeaveRequest {
     @JoinColumn(name = "emp_id", nullable = false)
     private Employee employee;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    @Column(name = "leave_date", nullable = false)
+    private LocalDate leaveDate;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
+
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
 
     @Column(name = "approver", nullable = true)
     private String approver;
@@ -51,20 +55,28 @@ public class LeaveRequest {
         this.employee = employee;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getLeaveDate() {
+        return leaveDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setLeaveDate(LocalDate leaveDate) {
+        this.leaveDate = leaveDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getApprover() {

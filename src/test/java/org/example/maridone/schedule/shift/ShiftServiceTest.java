@@ -10,6 +10,8 @@ import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.employee.EmployeeRepository;
 import org.example.maridone.enums.EarningsType;
 import org.example.maridone.schedule.dto.ShiftRequestDto;
+import org.example.maridone.schedule.dto.ShiftResponseDto;
+import org.example.maridone.schedule.mapper.ScheduleMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +27,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(MockitoExtension.class)
 class ShiftServiceTest {
 
-    @Mock private ShiftRepository shiftRepository;
+    @Mock private TemplateShiftRepository templateShiftRepository;
     @Mock private EmployeeRepository employeeRepository;
+    @Mock private ScheduleMapper scheduleMapper;
 
     @InjectMocks
     private ShiftService shiftService;
@@ -38,11 +41,11 @@ class ShiftServiceTest {
         ReflectionTestUtils.setField(emp, "employeeId", empId);
 
         when(employeeRepository.findById(empId)).thenReturn(Optional.of(emp));
-        when(shiftRepository.saveAll(anyList())).thenReturn(Collections.emptyList());
+        when(templateShiftRepository.saveAll(anyList())).thenReturn(Collections.emptyList());
 
         shiftService.createShifts(empId);
 
-        verify(shiftRepository).saveAll(anyList());
+        verify(templateShiftRepository).saveAll(anyList());
     }
 
     @Test
@@ -50,11 +53,11 @@ class ShiftServiceTest {
         Long empId = 1L;
         Employee emp = new Employee();
         ReflectionTestUtils.setField(emp, "employeeId", empId);
-        
-        when(employeeRepository.findById(empId)).thenReturn(Optional.of(emp));
-        when(shiftRepository.findAllByEmployeeId(empId)).thenReturn(List.of(new ShiftSchedule()));
 
-        List<ShiftSchedule> result = shiftService.getShiftSchedule(empId);
+        when(templateShiftRepository.findAllByEmployeeId(empId)).thenReturn(List.of(new TemplateShiftSchedule()));
+        when(employeeRepository.existsById(empId)).thenReturn(true);
+        when(shiftService.getShiftSchedule(empId)).thenReturn(List.of(new ShiftResponseDto()));
+        List<ShiftResponseDto> result = shiftService.getShiftSchedule(empId);
         Assertions.assertFalse(result.isEmpty());
     }
 
@@ -68,15 +71,14 @@ class ShiftServiceTest {
         dto.setStartTime(LocalTime.of(9, 0));
         dto.setEndTime(LocalTime.of(18, 0));
         dto.setDayOfWeek(DayOfWeek.MONDAY);
-        dto.setEarningsType(EarningsType.BASIC);
 
         Employee emp = new Employee();
         ReflectionTestUtils.setField(emp, "employeeId", empId);
 
         when(employeeRepository.findById(empId)).thenReturn(Optional.of(emp));
-        when(shiftRepository.save(any(ShiftSchedule.class))).thenAnswer(i -> i.getArgument(0));
+        when(templateShiftRepository.save(any(TemplateShiftSchedule.class))).thenAnswer(i -> i.getArgument(0));
 
-        ShiftSchedule result = shiftService.addShiftSchedule(dto);
+        TemplateShiftSchedule result = shiftService.addShiftSchedule(dto);
        
         Assertions.assertNotNull(result);
         Assertions.assertEquals(DayOfWeek.MONDAY, result.getDayOfWeek());

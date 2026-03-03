@@ -3,6 +3,7 @@ package org.example.maridone.schedule.shift;
 import org.example.maridone.marker.OnCreate;
 import org.example.maridone.marker.OnUpdate;
 import org.example.maridone.schedule.dto.ShiftRequestDto;
+import org.example.maridone.schedule.dto.ShiftResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,9 +28,9 @@ public class ShiftController {
     // if missing some shifts for some reason.
     @PostMapping("/add")
     @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<ShiftSchedule> addShiftSchedule(
+    public ResponseEntity<TemplateShiftSchedule> addShiftSchedule(
             @RequestBody @Validated(OnCreate.class) ShiftRequestDto payload) {
-        ShiftSchedule schedule = shiftService.addShiftSchedule(payload);
+        TemplateShiftSchedule schedule = shiftService.addShiftSchedule(payload);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .build()
@@ -40,16 +41,17 @@ public class ShiftController {
     //update shift
     @PatchMapping("/update")
     @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<ShiftSchedule> updateShiftSchedule(
+    public ResponseEntity<TemplateShiftSchedule> updateShiftSchedule(
             @RequestBody @Validated(OnUpdate.class) ShiftRequestDto payload) {
-        ShiftSchedule schedule = shiftService.updateShiftSchedule(payload);
+        TemplateShiftSchedule schedule = shiftService.updateShiftSchedule(payload);
         return ResponseEntity.ok(schedule);
     }
     //shift change request
+
     //get employee shifts
     @PreAuthorize("@userCheck.isSelf(#empId, Authentication.getName())")
     @GetMapping("/{empId}")
-    public List<ShiftSchedule> getShiftSchedule(
+    public List<ShiftResponseDto> getShiftSchedule(
             @PathVariable Long empId) {
         return shiftService.getShiftSchedule(empId);
     }

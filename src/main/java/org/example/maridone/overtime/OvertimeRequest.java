@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.EarningsType;
 import org.example.maridone.enums.Status;
-import org.example.maridone.payroll.itemcomponent.EarningsLine;
+import org.example.maridone.payroll.item.component.EarningsLine;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "overtime_request")
@@ -42,9 +42,9 @@ public class OvertimeRequest {
     private LocalDate workDate;
 
     @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
+    private LocalDateTime startTime;
     @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "overtime_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -94,19 +94,19 @@ public class OvertimeRequest {
         this.workDate = workDate;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
