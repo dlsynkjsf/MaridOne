@@ -85,6 +85,37 @@ public class PayrollCalculator {
         return hours.setScale(2, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal calculateNightDiffHours(LocalTime logIn, LocalTime logOut) {
+        int inMinutes = logIn.getHour() * 60 + logIn.getMinute();
+        int outMinutes = logOut.getHour() * 60 + logOut.getMinute();
 
+        if (outMinutes <= inMinutes) {
+            outMinutes += 24 * 60;
+        }
+
+        int nightMinutes = overlapMinutes(inMinutes, outMinutes, 0, 6 * 60)
+                + overlapMinutes(inMinutes, outMinutes, 22 * 60, 30 * 60);
+
+        return BigDecimal.valueOf(nightMinutes)
+                .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+    }
+
+    //one hour unpaid lunch is excluded from compensable shift hours
+    public BigDecimal deductUnpaidLunchHour(BigDecimal rawHours) {
+        if (rawHours == null) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+        BigDecimal adjusted = rawHours.subtract(BigDecimal.ONE);
+        if (adjusted.compareTo(BigDecimal.ZERO) < 0) {
+            adjusted = BigDecimal.ZERO;
+        }
+        return adjusted.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private int overlapMinutes(int startA, int endA, int startB, int endB) {
+        int start = Math.max(startA, startB);
+        int end = Math.min(endA, endB);
+        return Math.max(0, end - start);
+    }
 
 }

@@ -372,20 +372,26 @@ public class PayrollService {
                         LocalTime logOut = outInstant.atZone(defaultProperties.getTimeZone()).toLocalTime();
 
                         //calculate worked hours
-                        BigDecimal hoursWorked = payrollCalculator.calculateHours(logIn, logOut); 
-                        
-                        EarningsLine restDayEarnings = new EarningsLine();
-                        restDayEarnings.setEarningsDate(loopDate);
-                        restDayEarnings.setHours(hoursWorked);
-                        BigDecimal premiumMultiplier = isRegularHoliday ? BigDecimal.valueOf(2.0) : BigDecimal.valueOf(1.3);
-                        restDayEarnings.setRate(hourlyRate.multiply(premiumMultiplier));
-                        restDayEarnings.setAmount(restDayEarnings.getHours().multiply(restDayEarnings.getRate()));
-                        restDayEarnings.setOvertime(false);
-                        earningsLines.add(restDayEarnings);
+                        BigDecimal hoursWorked = payrollCalculator.deductUnpaidLunchHour(
+                                payrollCalculator.calculateHours(logIn, logOut)
+                        );
+
+                        if (hoursWorked.compareTo(BigDecimal.ZERO) > 0) {
+                            EarningsLine restDayEarnings = new EarningsLine();
+                            restDayEarnings.setEarningsDate(loopDate);
+                            restDayEarnings.setHours(hoursWorked);
+                            BigDecimal premiumMultiplier = isRegularHoliday ? BigDecimal.valueOf(2.0) : BigDecimal.valueOf(1.3);
+                            restDayEarnings.setRate(hourlyRate.multiply(premiumMultiplier));
+                            restDayEarnings.setAmount(restDayEarnings.getHours().multiply(restDayEarnings.getRate()));
+                            restDayEarnings.setOvertime(false);
+                            earningsLines.add(restDayEarnings);
+                        }
                     }
                 } else {
                     //regular workday flow
-                    BigDecimal expectedHours = payrollCalculator.calculateHours(todaysSchedule.getStartTime(), todaysSchedule.getEndTime());
+                    BigDecimal expectedHours = payrollCalculator.deductUnpaidLunchHour(
+                            payrollCalculator.calculateHours(todaysSchedule.getStartTime(), todaysSchedule.getEndTime())
+                    );
                     BigDecimal leaveHours = BigDecimal.ZERO;
 
                     if (todaysLeave != null) {
@@ -409,7 +415,9 @@ public class PayrollService {
                     } else {
                         LocalTime logIn = dayInLog.getTimestamp().atZone(defaultProperties.getTimeZone()).toLocalTime();
                         LocalTime logOut = dayOutLog.getTimestamp().atZone(defaultProperties.getTimeZone()).toLocalTime();
-                        BigDecimal actualHours = payrollCalculator.calculateHours(logIn, logOut);
+                        BigDecimal actualHours = payrollCalculator.deductUnpaidLunchHour(
+                                payrollCalculator.calculateHours(logIn, logOut)
+                        );
                         //baseline is full shift hours or remaining hours when leave exists
                         BigDecimal baseline = todaysLeave == null ? expectedHours : expectedRemainingHours;
 
@@ -425,7 +433,7 @@ public class PayrollService {
                     LocalTime logIn = dayInLog.getTimestamp().atZone(defaultProperties.getTimeZone()).toLocalTime();
                     LocalTime logOut = dayOutLog.getTimestamp().atZone(defaultProperties.getTimeZone()).toLocalTime();
 
-                    BigDecimal nsdHours = calculateNightDiffHours(logIn, logOut);
+                    BigDecimal nsdHours = payrollCalculator.calculateNightDiffHours(logIn, logOut);
                     if (nsdHours.compareTo(BigDecimal.ZERO) > 0) {
                         EarningsLine nsdLine = new EarningsLine();
                         nsdLine.setEarningsDate(loopDate);
@@ -507,21 +515,10 @@ public class PayrollService {
         }
     }
 
-    private BigDecimal calculateNightDiffHours(LocalTime logIn, LocalTime logOut) {
-        int inMinutes = logIn.getHour() * 60 + logIn.getMinute();
-        int outMinutes = logOut.getHour() * 60 + logOut.getMinute();
 
-        if (outMinutes <= inMinutes) {
-            outMinutes += 24 * 60;
-        }
-
-        int nightMinutes = overlapMinutes(inMinutes, outMinutes, 0, 6 * 60)
-                + overlapMinutes(inMinutes, outMinutes, 22 * 60, 30 * 60);
-
-        return BigDecimal.valueOf(nightMinutes)
-                .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
-    }
-
+    /*
+        HELPER METHODS FOR NON-EXEMPT
+    */
     private AttendanceLog findInLogForDate(List<AttendanceLog> attendanceLogs, LocalDate workDate) {
         return attendanceLogs.stream()
                 .filter(this::isInLog)
@@ -557,12 +554,6 @@ public class PayrollService {
 
     private boolean isOutLog(AttendanceLog log) {
         return log.getDirection() != null && log.getDirection().trim().equalsIgnoreCase("OUT");
-    }
-
-    private int overlapMinutes(int startA, int endA, int startB, int endB) {
-        int start = Math.max(startA, startB);
-        int end = Math.min(endA, endB);
-        return Math.max(0, end - start);
     }
 
 
