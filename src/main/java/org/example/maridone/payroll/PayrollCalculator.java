@@ -75,7 +75,7 @@ public class PayrollCalculator {
     }
 
     public BigDecimal calculateHours(List<TemplateShiftSchedule> schedules) {
-        if (schedules.isEmpty() || schedules == null) {
+        if (schedules == null || schedules.isEmpty()) {
             return BigDecimal.ZERO;
         }
         BigDecimal hours = BigDecimal.ZERO;
