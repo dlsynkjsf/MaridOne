@@ -1,12 +1,5 @@
 package org.example.maridone.payroll;
 
-import org.example.maridone.core.employee.Employee;
-import org.example.maridone.enums.ExemptionStatus;
-import org.example.maridone.payroll.item.PayrollItem;
-import org.example.maridone.payroll.item.component.*;
-import org.example.maridone.schedule.shift.TemplateShiftSchedule;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
@@ -14,6 +7,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.maridone.core.employee.Employee;
+import org.example.maridone.enums.ExemptionStatus;
+import org.example.maridone.payroll.item.PayrollItem;
+import org.example.maridone.payroll.item.component.DeductionsLine;
+import org.example.maridone.payroll.item.component.DeductionsRepository;
+import org.example.maridone.payroll.item.component.EarningsLine;
+import org.example.maridone.payroll.item.component.EarningsRepository;
+import org.example.maridone.schedule.shift.TemplateShiftSchedule;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PayrollCalculator {
@@ -46,15 +49,18 @@ public class PayrollCalculator {
         return earnings;
     }
 
-    //earnings for non exempt
-    public List<EarningsLine> setEarnings(Employee emp, PayrollItem item, List<TemplateShiftSchedule> shifts) {
-        List<EarningsLine> earnings =  new ArrayList<>();
-
-        return earnings;
+    //todo: Non-exempt earnings logic
+    public List<EarningsLine> setEarnings(Employee emp, PayrollItem item, List<EarningsLine> precomputedLines) {
+        return precomputedLines == null ? List.of() : precomputedLines;
     }
 
-    //todo: Deductions Logic for Exempt
-    public List<DeductionsLine> setDeductions(Employee emp) {
+    //todo: Deductions Logic (Exempt + Non-Exempt) using passed deduction components
+    public List<DeductionsLine> setDeductions(
+            Employee emp,
+            PayrollItem item,
+            BigDecimal absentDeductAmount,
+            BigDecimal lateDeductAmount
+    ) {
         return List.of();
     }
 
