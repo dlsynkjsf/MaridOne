@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AsyncConfig {
 
     /*
-        Increase this as throughput(users) increases exponentially
+        Increase this as throughput(users) increases
     */
     @Bean(name = "threadPoolTaskExecutor")
     @Primary
