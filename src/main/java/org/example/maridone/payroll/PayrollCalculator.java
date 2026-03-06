@@ -100,11 +100,16 @@ public class PayrollCalculator {
                 .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
     }
 
-    //one hour unpaid lunch is excluded from compensable shift hours
+    //one hour unpaid lunch is excluded only for longer shifts
     public BigDecimal deductUnpaidLunchHour(BigDecimal rawHours) {
         if (rawHours == null) {
             return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
         }
+        //for short shifts (e.g., half-day), do not deduct lunch
+        if (rawHours.compareTo(BigDecimal.valueOf(5)) <= 0) {
+            return rawHours.setScale(2, RoundingMode.HALF_UP);
+        }
+
         BigDecimal adjusted = rawHours.subtract(BigDecimal.ONE);
         if (adjusted.compareTo(BigDecimal.ZERO) < 0) {
             adjusted = BigDecimal.ZERO;
