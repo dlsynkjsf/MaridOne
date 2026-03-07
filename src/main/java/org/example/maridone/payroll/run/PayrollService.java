@@ -1,5 +1,7 @@
 package org.example.maridone.payroll.run;
 
+import jakarta.validation.Valid;
+import org.example.maridone.annotation.ExecutionTime;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
@@ -12,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.example.maridone.annotation.ExecutionTime;
 import org.example.maridone.common.CommonSpecs;
 import org.example.maridone.config.DefaultProperties;
 import org.example.maridone.core.employee.Employee;
@@ -51,7 +52,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.validation.Valid;
 
 @Service
 public class PayrollService {
@@ -300,7 +300,7 @@ public class PayrollService {
                 cursor = cursor.plusDays(1);
             }
         }
-        
+
         //create a key-value pair by emp id -> List<AttendanceLogs>
         Map<Long, List<AttendanceLog>> attendanceMap = allLogs.stream()
                 .collect(Collectors.groupingBy(AttendanceLog::getEmployeeId));
@@ -352,7 +352,7 @@ public class PayrollService {
                 LeaveRequest todaysLeave = leaves.stream()
                         .filter(l -> l.getLeaveDate().equals(loopDate))
                         .findFirst().orElse(null);
-                        
+
                 List<OvertimeRequest> todaysOT = requests.stream()
                         .filter(ot -> ot.getWorkDate().equals(loopDate))
                         .toList();
@@ -465,7 +465,7 @@ public class PayrollService {
             item.setEmployee(emp);
             item.setPayrollRun(run);
             item.setDisputes(new ArrayList<>());
-            
+
             //delegate earnings and deductions to payroll calculator
             List<EarningsLine> calculatedEarnings = payrollCalculator.setEarnings(emp, item, earningsLines);
             if (calculatedEarnings == null) {
@@ -473,8 +473,8 @@ public class PayrollService {
             }
             item.setEarnings(calculatedEarnings);
             //link back payroll item for ORM mapping
-            item.getEarnings().forEach(line -> line.setPayrollItem(item)); 
-            
+            item.getEarnings().forEach(line -> line.setPayrollItem(item));
+
             //keep deductions population delegated to PayrollCalculator task owner
             List<DeductionsLine> calculatedDeductions = payrollCalculator.setDeductions(
                     emp,
