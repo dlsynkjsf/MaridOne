@@ -116,10 +116,10 @@ class PayrollCalculatorTest {
         );
 
         Assertions.assertEquals(6, deductions.size());
-        assertDeduction(deductions, DeductionType.SSS, "1300.00");
+        assertDeduction(deductions, DeductionType.SSS, "875.00");
         assertDeduction(deductions, DeductionType.PHILHEALTH, "650.00");
         assertDeduction(deductions, DeductionType.PAGIBIG, "100.00");
-        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "2394.17");
+        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "2354.90");
         assertDeduction(deductions, DeductionType.ABSENT_DEDUCTION, "500.25");
         assertDeduction(deductions, DeductionType.LATE_PENALTY, "120.75");
         deductions.forEach(line -> Assertions.assertSame(item, line.getPayrollItem()));
@@ -139,10 +139,10 @@ class PayrollCalculatorTest {
         );
 
         Assertions.assertEquals(4, deductions.size());
-        assertDeduction(deductions, DeductionType.SSS, "1300.00");
+        assertDeduction(deductions, DeductionType.SSS, "875.00");
         assertDeduction(deductions, DeductionType.PHILHEALTH, "650.00");
         assertDeduction(deductions, DeductionType.PAGIBIG, "100.00");
-        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "2394.17");
+        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "2479.10");
         deductions.forEach(line -> Assertions.assertSame(item, line.getPayrollItem()));
         verifyNoInteractions(earningsRepository, deductionsRepository);
     }
@@ -159,7 +159,7 @@ class PayrollCalculatorTest {
                 BigDecimal.ZERO
         );
 
-        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "3905.00");
+        assertDeduction(deductions, DeductionType.BRACKET_LEVEL_THREE, "4071.60");
         Assertions.assertTrue(deductions.stream().noneMatch(d -> d.getDeductionType() == DeductionType.BRACKET_LEVEL_FOUR));
         verifyNoInteractions(earningsRepository, deductionsRepository);
     }
