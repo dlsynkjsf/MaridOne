@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.example.maridone.config.PayrollProperties;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.enums.DeductionType;
 import org.example.maridone.enums.ExemptionStatus;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import static org.mockito.Mockito.verifyNoInteractions;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -29,6 +31,9 @@ class PayrollCalculatorTest {
 
     @Mock
     private DeductionsRepository deductionsRepository;
+
+    @Spy
+    private PayrollProperties payrollProperties = new PayrollProperties();
 
     @InjectMocks
     private PayrollCalculator payrollCalculator;

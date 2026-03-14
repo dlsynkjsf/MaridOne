@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.example.maridone.annotation.ExecutionTime;
 import org.example.maridone.common.CommonSpecs;
 import org.example.maridone.config.DefaultProperties;
+import org.example.maridone.config.PayrollProperties;
 import org.example.maridone.core.employee.Employee;
 import org.example.maridone.core.employee.EmployeeRepository;
 import org.example.maridone.enums.EmploymentStatus;
@@ -70,6 +71,7 @@ public class PayrollService {
     private final PayrollCalculator payrollCalculator;
     private final PayrollMapper payrollMapper;
     private final DefaultProperties defaultProperties;
+    private final PayrollProperties payrollProperties;
 
     public PayrollService(
             PayrollRunRepository payrollRunRepository,
@@ -82,7 +84,8 @@ public class PayrollService {
             HolidayService holidayService,
             PayrollCalculator payrollCalculator,
             PayrollMapper payrollMapper,
-            DefaultProperties defaultProperties
+            DefaultProperties defaultProperties,
+            PayrollProperties payrollProperties
     )
     {
         this.payrollRunRepository = payrollRunRepository;
@@ -96,6 +99,7 @@ public class PayrollService {
         this.payrollCalculator = payrollCalculator;
         this.payrollMapper = payrollMapper;
         this.defaultProperties = defaultProperties;
+        this.payrollProperties = payrollProperties;
     }
 
     @Transactional
@@ -207,7 +211,7 @@ public class PayrollService {
                     BigDecimal totalDeductions = deductions.stream()
                             .map(DeductionsLine::getAmount)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
-                    item.setNetPay(semiMonthlySalary.subtract(totalDeductions).max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP));
+                    item.setNetPay(semiMonthlySalary.subtract(totalDeductions).setScale(2, RoundingMode.HALF_UP));
                     return item;
                 })
                 .toList();
@@ -327,7 +331,11 @@ public class PayrollService {
                             EarningsLine restDayEarnings = new EarningsLine();
                             restDayEarnings.setEarningsDate(loopDate);
                             restDayEarnings.setHours(hoursWorked);
-                            BigDecimal premiumMultiplier = isRegularHoliday ? BigDecimal.valueOf(2.0) : BigDecimal.valueOf(1.3);
+                            BigDecimal premiumMultiplier = payrollProperties.resolveHolidayOrRestDayMultiplier(
+                                    isRestDay,
+                                    isHoliday,
+                                    isRegularHoliday
+                            );
                             restDayEarnings.setRate(hourlyRate.multiply(premiumMultiplier));
                             restDayEarnings.setAmount(restDayEarnings.getHours().multiply(restDayEarnings.getRate()));
                             restDayEarnings.setOvertime(false);
@@ -373,7 +381,7 @@ public class PayrollService {
                         EarningsLine nsdLine = new EarningsLine();
                         nsdLine.setEarningsDate(loopDate);
                         nsdLine.setHours(nsdHours);
-                        nsdLine.setRate(hourlyRate.multiply(BigDecimal.valueOf(0.10)));
+                        nsdLine.setRate(hourlyRate.multiply(payrollProperties.getNightDifferentialMultiplier()));
                         nsdLine.setAmount(nsdHours.multiply(nsdLine.getRate()));
                         nsdLine.setOvertime(false);
                         earningsLines.add(nsdLine);
@@ -384,7 +392,7 @@ public class PayrollService {
                     EarningsLine otLine = new EarningsLine();
                     otLine.setEarningsDate(loopDate);
                     otLine.setHours(payrollCalculator.calculateHours(ot.getStartTime().toLocalTime(), ot.getEndTime().toLocalTime()));
-                    otLine.setRate(hourlyRate.multiply(BigDecimal.valueOf(1.25)));
+                    otLine.setRate(hourlyRate.multiply(payrollProperties.getOvertimeMultiplier()));
                     otLine.setAmount(otLine.getHours().multiply(otLine.getRate()));
                     otLine.setOvertime(true);
                     otLine.setOvertimeRequest(ot);
@@ -447,7 +455,7 @@ public class PayrollService {
                             .filter(amount -> amount != null)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            BigDecimal netPay = grossPay.subtract(deductionsTotal).max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal netPay = grossPay.subtract(deductionsTotal).setScale(2, RoundingMode.HALF_UP);
             item.setNetPay(netPay);
 
             items.add(item);
