@@ -228,6 +228,42 @@ public class PayrollProperties {
         return bracket == null ? DeductionType.BRACKET_LEVEL_ONE : bracket.getDeductionType();
     }
 
+    public BigDecimal computeMonthlyBasicPay(BigDecimal yearlyCompensation) {
+        BigDecimal yearly = normalizeMoney(yearlyCompensation);
+        if (yearly.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        return yearly.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal computeSemiMonthlyBasicPay(BigDecimal yearlyCompensation) {
+        BigDecimal yearly = normalizeMoney(yearlyCompensation);
+        if (yearly.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        return yearly.divide(BigDecimal.valueOf(24), 2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal computeDailyRate(BigDecimal yearlyCompensation) {
+        BigDecimal monthly = computeMonthlyBasicPay(yearlyCompensation);
+        if (monthly.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        return monthly.divide(BigDecimal.valueOf(26), 2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal computeHourlyRate(BigDecimal yearlyCompensation) {
+        BigDecimal daily = computeDailyRate(yearlyCompensation);
+        if (daily.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO.setScale(6, RoundingMode.HALF_UP);
+        }
+
+        return daily.divide(BigDecimal.valueOf(8), 6, RoundingMode.HALF_UP);
+    }
+
     public BigDecimal computeSssEmployeeSharePerCutoff(BigDecimal monthlyCompensation) {
         BigDecimal msc = resolveSssMsc(monthlyCompensation);
         if (msc.compareTo(BigDecimal.ZERO) <= 0) {
@@ -261,6 +297,10 @@ public class PayrollProperties {
 
         BigDecimal monthlyShare = mfs.multiply(rate);
         return monthlyShare.divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal computeExemptDailyAbsenceRate(BigDecimal yearlyCompensation) {
+        return computeDailyRate(yearlyCompensation);
     }
 
     public BigDecimal resolveHolidayOrRestDayMultiplier(boolean isRestDay, boolean isHoliday, boolean isRegularHoliday) {

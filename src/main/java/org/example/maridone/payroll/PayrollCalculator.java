@@ -43,33 +43,25 @@ public class PayrollCalculator {
         List<EarningsLine> earnings =  new ArrayList<>();
         BigDecimal grossPay = normalizeMoney(item.getGrossPay());
         LocalDate earningsDate = resolveEarningsDate(item);
-        if (emp.getExemptionStatus().equals(ExemptionStatus.EXEMPT)) {
-            EarningsLine earningsLine = new EarningsLine();
-            earningsLine.setRate(BigDecimal.ZERO);
-            earningsLine.setHours(BigDecimal.ZERO);
-            earningsLine.setAmount(grossPay);
-            earningsLine.setEarningsDate(earningsDate);
-            earningsLine.setPayrollItem(item);
-            earningsLine.setOvertime(false);
-            earnings.add(earningsLine);
-        } else if (emp.getExemptionStatus().equals(ExemptionStatus.NON_EXEMPT)) {
-            EarningsLine regularLine = new EarningsLine();
-            regularLine.setRate(BigDecimal.ZERO);
-            regularLine.setHours(BigDecimal.ZERO);
-            regularLine.setAmount(grossPay);
-            regularLine.setEarningsDate(earningsDate);
-            regularLine.setPayrollItem(item);
-            regularLine.setOvertime(false);
-            earnings.add(regularLine);
+        if (emp.getExemptionStatus().equals(ExemptionStatus.EXEMPT)
+                || emp.getExemptionStatus().equals(ExemptionStatus.NON_EXEMPT)) {
+            earnings.add(createBaseEarningsLine(item, grossPay, earningsDate));
         }
         return earnings;
     }
 
     public List<EarningsLine> setEarnings(Employee emp, PayrollItem item, List<EarningsLine> precomputedLines) {
-        if (precomputedLines == null || precomputedLines.isEmpty()) {
-            return List.of();
-        }
         LocalDate fallbackDate = resolveEarningsDate(item);
+        List<EarningsLine> earnings = new ArrayList<>();
+
+        if (emp.getExemptionStatus().equals(ExemptionStatus.NON_EXEMPT)) {
+            earnings.add(createBaseEarningsLine(item, normalizeMoney(item.getGrossPay()), fallbackDate));
+        }
+
+        if (precomputedLines == null || precomputedLines.isEmpty()) {
+            return earnings;
+        }
+
         for (EarningsLine line : precomputedLines) {
             line.setPayrollItem(item);
             if (line.getEarningsDate() == null) {
@@ -87,8 +79,9 @@ public class PayrollCalculator {
             if (line.getAmount() == null) {
                 line.setAmount(BigDecimal.ZERO);
             }
+            earnings.add(line);
         }
-        return precomputedLines;
+        return earnings;
     }
 
     public List<DeductionsLine> setDeductions(
@@ -115,7 +108,7 @@ public class PayrollCalculator {
         addDeductionLine(deductions, item, DeductionType.LATE_PENALTY, collectedLate);
 
         BigDecimal payAfterAttendance = grossPay.subtract(collectedAbsent).subtract(collectedLate);
-        BigDecimal monthlyBasicPay = yearlySalary.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+        BigDecimal monthlyBasicPay = payrollProperties.computeMonthlyBasicPay(yearlySalary);
         BigDecimal sssDue = payrollProperties.computeSssEmployeeSharePerCutoff(monthlyBasicPay);
         BigDecimal philHealthDue = payrollProperties.computePhilHealthEmployeeSharePerCutoff(monthlyBasicPay);
         BigDecimal pagibigDue = payrollProperties.computePagibigEmployeeSharePerCutoff(monthlyBasicPay);
@@ -208,6 +201,17 @@ public class PayrollCalculator {
         line.setDeductionType(type);
         line.setAmount(normalized);
         deductions.add(line);
+    }
+
+    private EarningsLine createBaseEarningsLine(PayrollItem item, BigDecimal amount, LocalDate earningsDate) {
+        EarningsLine line = new EarningsLine();
+        line.setRate(BigDecimal.ZERO);
+        line.setHours(BigDecimal.ZERO);
+        line.setAmount(normalizeMoney(amount));
+        line.setEarningsDate(earningsDate);
+        line.setPayrollItem(item);
+        line.setOvertime(false);
+        return line;
     }
 
     private BigDecimal collectAmount(BigDecimal pool, BigDecimal due) {

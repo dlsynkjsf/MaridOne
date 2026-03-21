@@ -84,27 +84,44 @@ class PayrollCalculatorTest {
 
         List<EarningsLine> result = payrollCalculator.setEarnings(emp, item, List.of(precomputed));
 
-        Assertions.assertEquals(1, result.size());
-        EarningsLine line = result.get(0);
-        assertBigDecimalEquals("555.50", line.getAmount());
-        assertBigDecimalEquals("0.00", line.getHours());
-        assertBigDecimalEquals("0.00", line.getRate());
-        Assertions.assertFalse(line.getOvertime());
-        Assertions.assertEquals(LocalDate.of(2026, 4, 1), line.getEarningsDate());
-        Assertions.assertSame(item, line.getPayrollItem());
+        Assertions.assertEquals(2, result.size());
+
+        EarningsLine baseLine = result.stream()
+                .filter(line -> new BigDecimal("26000.00").compareTo(line.getAmount()) == 0)
+                .findFirst()
+                .orElseThrow();
+        assertBigDecimalEquals("26000.00", baseLine.getAmount());
+        assertBigDecimalEquals("0.00", baseLine.getHours());
+        assertBigDecimalEquals("0.00", baseLine.getRate());
+        Assertions.assertFalse(baseLine.getOvertime());
+        Assertions.assertEquals(LocalDate.of(2026, 4, 1), baseLine.getEarningsDate());
+        Assertions.assertSame(item, baseLine.getPayrollItem());
+
+        EarningsLine premiumLine = result.stream()
+                .filter(line -> new BigDecimal("555.50").compareTo(line.getAmount()) == 0)
+                .findFirst()
+                .orElseThrow();
+        assertBigDecimalEquals("555.50", premiumLine.getAmount());
+        assertBigDecimalEquals("0.00", premiumLine.getHours());
+        assertBigDecimalEquals("0.00", premiumLine.getRate());
+        Assertions.assertFalse(premiumLine.getOvertime());
+        Assertions.assertEquals(LocalDate.of(2026, 4, 1), premiumLine.getEarningsDate());
+        Assertions.assertSame(item, premiumLine.getPayrollItem());
         verifyNoInteractions(earningsRepository, deductionsRepository);
     }
 
     @Test
-    void setEarnings_ShouldReturnEmpty_WhenPrecomputedLinesAreNullOrEmpty() {
+    void setEarnings_ShouldReturnBaseLine_WhenPrecomputedLinesAreNullOrEmptyForNonExempt() {
         Employee emp = buildEmployee(ExemptionStatus.NON_EXEMPT, "624000.00");
         PayrollItem item = buildItem("26000.00", LocalDate.of(2026, 4, 1));
 
         List<EarningsLine> nullResult = payrollCalculator.setEarnings(emp, item, null);
         List<EarningsLine> emptyResult = payrollCalculator.setEarnings(emp, item, List.of());
 
-        Assertions.assertTrue(nullResult.isEmpty());
-        Assertions.assertTrue(emptyResult.isEmpty());
+        Assertions.assertEquals(1, nullResult.size());
+        Assertions.assertEquals(1, emptyResult.size());
+        assertBigDecimalEquals("26000.00", nullResult.get(0).getAmount());
+        assertBigDecimalEquals("26000.00", emptyResult.get(0).getAmount());
         verifyNoInteractions(earningsRepository, deductionsRepository);
     }
 
