@@ -1,0 +1,21 @@
+meta {
+  name: 25 Get Live Earnings
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/earnings/{{live_item_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{live_employee_access_token}}
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

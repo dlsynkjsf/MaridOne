@@ -1,0 +1,38 @@
+meta {
+  name: 10 Login Employee 10
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "{{employee10_username}}",
+    "password": "{{employee10_password}}",
+    "rememberMe": false
+  }
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  if (data && data.accessToken) bru.setEnvVar("employee10_access_token", data.accessToken);
+  if (data && data.refreshToken) bru.setEnvVar("employee10_refresh_token", data.refreshToken);
+  if (data && data.accessToken) bru.setEnvVar("live_employee_access_token", data.accessToken);
+  if (data && data.refreshToken) bru.setEnvVar("live_employee_refresh_token", data.refreshToken);
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

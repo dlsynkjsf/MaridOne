@@ -1,0 +1,26 @@
+meta {
+  name: 19 List Pending Overtime For HR
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/api/overtime/all
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{hr_access_token}}
+}
+
+params:query {
+  page: 0
+  size: 50
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

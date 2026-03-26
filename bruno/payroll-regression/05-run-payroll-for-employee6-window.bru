@@ -1,0 +1,35 @@
+meta {
+  name: 05 Run Payroll For Employee 6 Window
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/test/payroll-run
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{hr_access_token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "periodStart": "{{user6_period_start}}",
+    "periodEnd": "{{user6_period_end}}",
+    "periodDescription": "Bruno payroll regression for Employee 6",
+    "payrollStatus": "IN_PROGRESS",
+    "runType": "REGULAR"
+  }
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

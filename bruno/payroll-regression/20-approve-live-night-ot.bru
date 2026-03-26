@@ -1,0 +1,33 @@
+meta {
+  name: 20 Approve Live Night OT
+  type: http
+  seq: 20
+}
+
+patch {
+  url: {{baseUrl}}/api/overtime/update
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{hr_access_token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "overtimeId": {{live_overtime_id}},
+    "updateStatus": "APPROVED",
+    "approveReason": "Approved for live payroll regression"
+  }
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

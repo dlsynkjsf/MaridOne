@@ -1,0 +1,21 @@
+meta {
+  name: 14 Get Employee 10 Payroll Items
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/{{employee10_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee10_access_token}}
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

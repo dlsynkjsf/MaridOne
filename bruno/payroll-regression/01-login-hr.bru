@@ -1,0 +1,36 @@
+meta {
+  name: 01 Login HR
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "{{hr_username}}",
+    "password": "{{hr_password}}",
+    "rememberMe": false
+  }
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  if (data && data.accessToken) bru.setEnvVar("hr_access_token", data.accessToken);
+  if (data && data.refreshToken) bru.setEnvVar("hr_refresh_token", data.refreshToken);
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,26 @@
+meta {
+  name: 12 Get Employee 10 Overtime
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseUrl}}/api/overtime/all/{{employee10_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee10_access_token}}
+}
+
+params:query {
+  page: 0
+  size: 50
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

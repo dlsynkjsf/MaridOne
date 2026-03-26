@@ -1,0 +1,36 @@
+meta {
+  name: 02 Login Employee 6
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "{{employee6_username}}",
+    "password": "{{employee6_password}}",
+    "rememberMe": false
+  }
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  if (data && data.accessToken) bru.setEnvVar("employee6_access_token", data.accessToken);
+  if (data && data.refreshToken) bru.setEnvVar("employee6_refresh_token", data.refreshToken);
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

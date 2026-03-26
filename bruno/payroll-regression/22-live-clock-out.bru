@@ -1,0 +1,21 @@
+meta {
+  name: 22 Live Clock Out
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseUrl}}/api/logs/attendance/{{live_employee_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{live_employee_access_token}}
+}
+
+tests {
+  test("returns 204", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

@@ -1,0 +1,39 @@
+meta {
+  name: 04 Get Employee 6 Overtime
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/overtime/all/{{employee6_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee6_access_token}}
+}
+
+params:query {
+  page: 0
+  size: 50
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("shows both seeded approved overtime requests", function() {
+    const rawBody = res.getBody();
+    const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const content = Array.isArray(data && data.content) ? data.content : [];
+    const hasOrdinaryOt = content.some(function(item) {
+      return item.workDate === "2026-04-06";
+    });
+    const hasNightOt = content.some(function(item) {
+      return item.workDate === "2026-04-07";
+    });
+    expect(hasOrdinaryOt).to.equal(true);
+    expect(hasNightOt).to.equal(true);
+  });
+}

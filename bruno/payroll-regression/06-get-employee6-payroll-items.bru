@@ -1,0 +1,52 @@
+meta {
+  name: 06 Get Employee 6 Payroll Items
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/{{employee6_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee6_access_token}}
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  const items = Array.isArray(data) ? data : [];
+  const matches = items.filter(function(item) {
+    return item.runDetails
+      && item.runDetails.periodStart === bru.getEnvVar("user6_period_start")
+      && item.runDetails.periodEnd === bru.getEnvVar("user6_period_end");
+  });
+  const match = matches.reduce(function(current, item) {
+    if (!current) return item;
+    const currentRunId = current.runDetails && current.runDetails.id ? Number(current.runDetails.id) : 0;
+    const itemRunId = item.runDetails && item.runDetails.id ? Number(item.runDetails.id) : 0;
+    return itemRunId > currentRunId ? item : current;
+  }, null);
+  if (match && match.id != null) {
+    bru.setEnvVar("employee6_item_id", String(match.id));
+  }
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("captures the seeded payroll item id", function() {
+    const rawBody = res.getBody();
+    const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const items = Array.isArray(data) ? data : [];
+    const match = items.find(function(item) {
+      return item.runDetails
+        && item.runDetails.periodStart === bru.getEnvVar("user6_period_start")
+        && item.runDetails.periodEnd === bru.getEnvVar("user6_period_end");
+    });
+    expect(!!match).to.equal(true);
+  });
+}

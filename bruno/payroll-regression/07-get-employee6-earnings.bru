@@ -1,0 +1,52 @@
+meta {
+  name: 07 Get Employee 6 Earnings
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/earnings/{{employee6_item_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee6_access_token}}
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("pays exactly one overtime line for the seeded night OT", function() {
+    const rawBody = res.getBody();
+    const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const lines = Array.isArray(data) ? data : [];
+    const overtimeLines = lines.filter(function(line) {
+      return line.isOvertime === true;
+    });
+    expect(overtimeLines.length).to.equal(1);
+  });
+  test("uses the expected overtime hours and amount", function() {
+    const rawBody = res.getBody();
+    const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const lines = Array.isArray(data) ? data : [];
+    const overtimeLine = lines.find(function(line) {
+      return line.isOvertime === true;
+    });
+    expect(!!overtimeLine).to.equal(true);
+    expect(Math.abs(Number(overtimeLine.hours) - Number(bru.getEnvVar("expected_user6_paid_ot_hours"))) < 0.001).to.equal(true);
+    expect(Math.abs(Number(overtimeLine.amount) - Number(bru.getEnvVar("expected_user6_paid_ot_amount"))) < 0.01).to.equal(true);
+  });
+  test("adds a separate compounded night differential line for the overtime hours", function() {
+    const rawBody = res.getBody();
+    const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const lines = Array.isArray(data) ? data : [];
+    const otNightLine = lines.find(function(line) {
+      return line.isOvertime === false
+        && Math.abs(Number(line.hours) - Number(bru.getEnvVar("expected_user6_paid_ot_nsd_hours"))) < 0.001
+        && Math.abs(Number(line.amount) - Number(bru.getEnvVar("expected_user6_paid_ot_nsd_amount"))) < 0.01;
+    });
+    expect(!!otNightLine).to.equal(true);
+  });
+}

@@ -1,0 +1,35 @@
+meta {
+  name: 18 Create Live Night OT Request
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/api/overtime/create
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{live_employee_access_token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "workDate": "{{live_work_date}}",
+    "startTime": "{{live_overtime_start}}",
+    "endTime": "{{live_overtime_end}}",
+    "overtimeType": "OVERTIME",
+    "reason": "{{live_overtime_reason}}"
+  }
+}
+
+tests {
+  test("returns 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

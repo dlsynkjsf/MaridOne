@@ -1,0 +1,28 @@
+meta {
+  name: 11 Get Employee 10 Account
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/user/details/{{employee10_username}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee10_access_token}}
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  if (data && data.employeeId != null) bru.setEnvVar("employee10_id", String(data.employeeId));
+  if (data && data.employeeId != null) bru.setEnvVar("live_employee_id", String(data.employeeId));
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

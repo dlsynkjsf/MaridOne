@@ -1,0 +1,35 @@
+meta {
+  name: 23 Run Live Payroll
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/test/payroll-run
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{hr_access_token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "periodStart": "{{live_period_start}}",
+    "periodEnd": "{{live_period_end}}",
+    "periodDescription": "Bruno live night OT payroll regression",
+    "payrollStatus": "IN_PROGRESS",
+    "runType": "REGULAR"
+  }
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

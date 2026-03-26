@@ -1,0 +1,27 @@
+meta {
+  name: 03 Get Employee 6 Account
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/user/details/{{employee6_username}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee6_access_token}}
+}
+
+script:post-response {
+  const rawBody = res.getBody();
+  const data = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+  if (data && data.employeeId != null) bru.setEnvVar("employee6_id", String(data.employeeId));
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

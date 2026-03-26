@@ -1,0 +1,27 @@
+meta {
+  name: 17 Get Employee 10 Attendance
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/api/logs/attendance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{hr_access_token}}
+}
+
+params:query {
+  empId: {{employee10_id}}
+  page: 0
+  size: 50
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,21 @@
+meta {
+  name: 24 Get Live Payroll Items
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/{{live_employee_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{live_employee_access_token}}
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,21 @@
+meta {
+  name: 16 Get Employee 10 Deductions
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/payroll/item/deductions/{{employee10_item_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{employee10_access_token}}
+}
+
+tests {
+  test("returns 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
